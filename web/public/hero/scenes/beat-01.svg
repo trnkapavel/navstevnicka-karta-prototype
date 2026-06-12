@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 160" fill="none" aria-hidden="true">
+  <title>Hled�n� a v�br  vyhled�v�n� online</title>
+  <!-- Iso podstavec -->
+  <path d="M40 108 L100 78 L160 108 L100 138 Z" fill="#f0eeea" stroke="#d8d4d0" stroke-width="1.2"/>
+  <path d="M40 108 L40 118 L100 148 L100 138 Z" fill="#e5e2dd"/>
+  <path d="M100 138 L100 148 L160 118 L160 108 Z" fill="#ddd9d4"/>
+  <!-- Laptop -->
+  <path d="M62 96 L118 68 L126 72 L70 100 Z" fill="#ffffff" stroke="#202124" stroke-width="1" stroke-opacity="0.2"/>
+  <path d="M62 96 L62 102 L70 106 L70 100 Z" fill="#e5e2dd"/>
+  <path d="M70 100 L70 106 L126 78 L126 72 Z" fill="#ddd9d4"/>
+  <rect x="74" y="74" width="44" height="28" rx="2" fill="#202124"/>
+  <rect x="77" y="77" width="38" height="22" rx="1.5" fill="#f8f6f2"/>
+  <!-- Map pin -->
+  <circle cx="96" cy="86" r="5" fill="#b50000"/>
+  <path d="M96 91 L96 96" stroke="#b50000" stroke-width="1.8" stroke-linecap="round"/>
+  <path d="M96 86 L93 89 M96 86 L99 89" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round"/>
+  <!-- Kan�ly -->
+  <circle cx="108" cy="80" r="4" fill="#b50000" opacity="0.85"/>
+  <text x="108" y="82" text-anchor="middle" fill="#fff" font-size="5" font-family="Inter,sans-serif" font-weight="700">B</text>
+  <circle cx="114" cy="86" r="3.5" fill="#202124" opacity="0.35"/>
+  <circle cx="110" cy="92" r="3.5" fill="#202124" opacity="0.25"/>
+  <path d="M88 90 Q98 78 108 80" stroke="#b50000" stroke-width="1" stroke-dasharray="2 2" opacity="0.5"/>
+  <!-- Kl�vesnice -->
+  <path d="M66 102 L122 76 L128 79 L72 105 Z" fill="#ffffff" stroke="#202124" stroke-width="0.8" stroke-opacity="0.15"/>
+</svg>

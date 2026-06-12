@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 160" fill="none" aria-hidden="true">
+  <title>Po odjezdu  hodnocen� a follow-up</title>
+  <path d="M38 108 L100 78 L162 108 L100 138 Z" fill="#f0eeea" stroke="#d8d4d0" stroke-width="1.2"/>
+  <path d="M38 108 L38 118 L100 148 L100 138 Z" fill="#e5e2dd"/>
+  <path d="M100 138 L100 148 L162 118 L162 108 Z" fill="#ddd9d4"/>
+  <!-- Stol -->
+  <path d="M50 100 L130 60 L138 64 L58 104 Z" fill="#ffffff" stroke="#202124" stroke-width="1" stroke-opacity="0.15"/>
+  <!-- Ob�lka / mail -->
+  <rect x="72" y="72" width="36" height="24" rx="2" fill="#ffffff" stroke="#202124" stroke-width="0.9" stroke-opacity="0.18"/>
+  <path d="M72 76 L90 88 L108 76" stroke="#b50000" stroke-width="1.2" opacity="0.55"/>
+  <rect x="78" y="82" width="22" height="2" rx="0.5" fill="#202124" opacity="0.12"/>
+  <rect x="78" y="86" width="16" height="2" rx="0.5" fill="#202124" opacity="0.1"/>
+  <!-- Hvzdi
+ky -->
+  <path d="M118 58 l2 4 l4.5 0.5 l-3.5 3 l1 4.5 l-4 -2.5 l-4 2.5 l1 -4.5 l-3.5 -3 l4.5 -0.5 Z" fill="#b50000"/>
+  <path d="M130 62 l1.5 3 l3.5 0.4 l-2.7 2.2 l0.8 3.5 l-3.1 -1.9 l-3.1 1.9 l0.8 -3.5 l-2.7 -2.2 l3.5 -0.4 Z" fill="#b50000" opacity="0.7"/>
+  <path d="M108 66 l1.5 3 l3.5 0.4 l-2.7 2.2 l0.8 3.5 l-3.1 -1.9 l-3.1 1.9 l0.8 -3.5 l-2.7 -2.2 l3.5 -0.4 Z" fill="#b50000" opacity="0.5"/>
+  <!-- Telefon s notifikac� -->
+  <rect x="128" y="78" width="14" height="24" rx="2.5" fill="#202124"/>
+  <rect x="130" y="82" width="10" height="16" rx="1" fill="#f8f6f2"/>
+  <circle cx="140" cy="76" r="5" fill="#b50000"/>
+  <text x="140" y="78" text-anchor="middle" fill="#fff" font-size="6" font-family="Inter,sans-serif" font-weight="700">1</text>
+  <!-- Srd�
+ko / loyalty -->
+  <path d="M62 82 C62 78 66 76 68 80 C70 76 74 78 74 82 C74 86 68 90 68 90 C68 90 62 86 62 82 Z" fill="#b50000" opacity="0.35"/>
+</svg>
