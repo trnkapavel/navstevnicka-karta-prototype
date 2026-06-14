@@ -1,36 +1,123 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🗺️ Návštěvnická karta Berounska
 
-## Getting Started
+**PWA prototyp digitální návštěvnické karty pro region Berounsko · Brdy · Podbrdsko**
 
-First, run the development server:
+Hosté sbírají body za každou návštěvu, uplatňují slevy u místních partnerů a objevují tipy na výlety — vše z jedné aplikace uložené na ploše telefonu.
+
+🌐 **Live demo:** [navstevnicka-karta-prototype.vercel.app](https://navstevnicka-karta-prototype.vercel.app/app)
+
+---
+
+## ✨ Co aplikace umí
+
+- 🏆 **Gamifikace** — body za návštěvy, úrovně, série (streak), odznaky
+- 🎫 **Slevy** — procentuální sleva, vstup zdarma nebo bonusová výhoda
+- ❤️ **Oblíbená místa** — uložení a rychlý přístup
+- 🤖 **AI vyhledávání** — hledání míst přirozeným jazykem
+- 📲 **PWA** — funguje offline, jde uložit na plochu jako nativní app
+- 🍎 **iOS splash screeny** — správný startup screen pro všechny iPhone
+
+---
+
+## 🗺️ Místa v aplikaci
+
+| Místo | Výhoda |
+|-------|--------|
+| 🏛️ Koněpruské jeskyně | 20 % sleva |
+| 🏰 Zřícenina hradu Točník | Vstup zdarma |
+| 🏯 Hrad Žebrák | 15 % sleva |
+| 🏊 Aquapark Beroun | 25 % sleva |
+| 🍺 Hostomický pivovar | Bonus |
+| 🌿 Naučná stezka Brdy – Tok | Vstup zdarma |
+| 🏡 Zámek Liteň | 10 % sleva |
+| 🍽️ Restaurace u Sv. Jana | Bonus |
+| 🛏️ Penzion Zadní Třebaň | 20 % sleva |
+| ⭐ Hrad Křivoklát | 15 % sleva · HOT |
+
+---
+
+## 🎨 Design
+
+- Světlý režim s přírodní zelenou paletou
+- Glass morphism efekty (`backdrop-filter: blur`)
+- Animované Aurora pozadí (pastelové blobs)
+- Plynné přechody přes Framer Motion
+- Fonty Inter + Outfit
+
+---
+
+## 🛠️ Technologie
+
+| | |
+|---|---|
+| **Framework** | Next.js 16 (App Router) |
+| **Styling** | Tailwind CSS v4 |
+| **Animace** | Framer Motion |
+| **Ikony** | Lucide React |
+| **Deploy** | Vercel |
+
+---
+
+## 🚀 Spuštění
 
 ```bash
+# Klonování
+git clone https://github.com/trnkapavel/navstevnicka-karta-prototype.git
+cd navstevnicka-karta-prototype
+
+# Instalace závislostí
+npm install
+
+# Vývojový server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# → http://localhost:3000/app
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Deploy na Vercel
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npx vercel --prod --yes
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 📁 Struktura projektu
 
-To learn more about Next.js, take a look at the following resources:
+```
+app/
+├── app/page.tsx              # Hlavní obrazovka (4 taby)
+├── app/place/[id]/page.tsx   # Detail místa
+├── globals.css               # Design systém, glass třídy
+└── layout.tsx                # PWA meta tagy, fonty
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+components/
+├── ui/Aurora.tsx             # Animované pozadí
+├── ui/DiscountBadge.tsx      # Odznak slevy
+├── AISearch.tsx              # AI vyhledávání
+└── DiscountFlow.tsx          # Flow uplatnění slevy
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+data/places.ts                # 10 reálných míst z regionu
+lib/
+├── discounts.ts              # Logika slev a bodů
+└── game-context.tsx          # Herní stav (body, série, oblíbená)
 
-## Deploy on Vercel
+public/
+├── manifest.json             # PWA manifest
+├── sw.js                     # Service worker
+├── icon-192.png / icon-512.png
+└── splash-*.png              # iOS splash screeny
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📋 Plánované funkce
+
+- [ ] Skutečný backend / databáze míst
+- [ ] QR kód skener pro uplatnění slevy u pokladny
+- [ ] Interaktivní mapa regionu
+- [ ] Push notifikace (nová místa, body)
+- [ ] Přihlášení uživatele
+
+---
+
+*Prototyp vytvořen pro demonstraci konceptu digitální návštěvnické karty.*
