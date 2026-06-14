@@ -38,6 +38,9 @@ interface GameState {
   redeemedPlaceIds: string[];
   redemptions: RedemptionRecord[];
   favorites: string[];
+  userName: string | null;
+  userEmail: string | null;
+  unlockedTickets: string[];
 }
 
 const DEFAULT: GameState = {
@@ -49,6 +52,9 @@ const DEFAULT: GameState = {
   redeemedPlaceIds: [],
   redemptions: [],
   favorites: [],
+  userName: null,
+  userEmail: null,
+  unlockedTickets: [],
 };
 
 const STORAGE_KEY = "nk-game-state-v1";
@@ -57,6 +63,7 @@ interface GameContextValue extends GameState {
   level: ReturnType<typeof getLevel>;
   achievements: Achievement[];
   challenges: { label: string; reward: number; deadline: string; done: boolean; icon: string }[];
+  isRegistered: boolean;
   redeemDiscount: (payload: {
     placeId: string;
     placeName: string;
@@ -64,6 +71,9 @@ interface GameContextValue extends GameState {
     pointsReward: number;
     category: string;
   }) => { leveledUp: boolean; newAchievement?: string };
+  register: (name: string, email: string) => void;
+  unlockTicket: (placeId: string, cost: number) => boolean;
+  isTicketUnlocked: (placeId: string) => boolean;
   toggleFavorite: (id: string) => void;
   isFavorite: (id: string) => boolean;
   hasRedeemed: (id: string) => boolean;
@@ -202,6 +212,20 @@ export function GameProvider({ children }: { children: ReactNode }) {
     []
   );
 
+  const register = useCallback((name: string, email: string) => {
+    setState((prev) => ({ ...prev, userName: name, userEmail: email }));
+  }, []);
+
+  const unlockTicket = useCallback((placeId: string, cost: number): boolean => {
+    let success = false;
+    setState((prev) => {
+      if (prev.points < cost || prev.unlockedTickets.includes(placeId)) return prev;
+      success = true;
+      return { ...prev, points: prev.points - cost, unlockedTickets: [...prev.unlockedTickets, placeId] };
+    });
+    return success;
+  }, []);
+
   const toggleFavorite = useCallback((id: string) => {
     setState((prev) => ({
       ...prev,
@@ -245,12 +269,16 @@ export function GameProvider({ children }: { children: ReactNode }) {
       level,
       achievements,
       challenges,
+      isRegistered: !!state.userName,
       redeemDiscount,
+      register,
+      unlockTicket,
+      isTicketUnlocked: (id) => state.unlockedTickets.includes(id),
       toggleFavorite,
       isFavorite: (id) => state.favorites.includes(id),
       hasRedeemed: (id) => state.redeemedPlaceIds.includes(id),
     };
-  }, [state, redeemDiscount, toggleFavorite]);
+  }, [state, redeemDiscount, register, unlockTicket, toggleFavorite]);
 
   if (!hydrated) {
     return (

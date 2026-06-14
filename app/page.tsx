@@ -124,6 +124,7 @@ export default function AppPage() {
     points, savingsKc, visits, streak,
     favorites, toggleFavorite, isFavorite,
     achievements, challenges,
+    isRegistered, userName, unlockTicket, isTicketUnlocked,
   } = useGame();
 
   const hotDeals = useMemo(() => places.filter(p => p.hot).slice(0, 5), []);
@@ -316,7 +317,7 @@ export default function AppPage() {
           </motion.div>
           )}
 
-          {/* ── KARTA ── */}
+          {/* ── KARTA / ODMĚNY ── */}
           {activeTab === "card" && (
           <motion.div
             key="card"
@@ -325,166 +326,169 @@ export default function AppPage() {
             exit={{ opacity: 0, x: 16 }}
             transition={{ duration: 0.18, ease: "easeOut" }}
           >
-            <div className="px-5 header-top pb-8">
-              <p className="text-xs font-semibold mb-1" style={{ color: "var(--text-muted)" }}>Vaše karta</p>
-              <h1 className="font-black text-2xl mb-4" style={{ color: "var(--text-main)", fontFamily: "var(--font-outfit)" }}>
-                Přehled výhod
-              </h1>
+            <div className="header-top pb-8">
 
-              <LevelBar />
-
-              {/* Holographic card */}
-              <motion.div
-                initial={{ opacity: 0, y: 20, scale: 0.97 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ type: "spring" as const, stiffness: 280 }}
-                className="relative rounded-3xl overflow-hidden mb-6 select-none shadow-xl"
-                style={{ aspectRatio: "1.6", background: "linear-gradient(135deg, #0a2540 0%, #1a4570 40%, #0d3d2a 100%)" }}
-              >
-                <div className="absolute inset-0 holo-shine opacity-60 pointer-events-none" />
-                <div
-                  className="absolute inset-0 opacity-5"
-                  style={{
-                    backgroundImage: "linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)",
-                    backgroundSize: "20px 20px",
-                  }}
-                />
-                <div className="absolute top-4 left-5 right-5">
-                  <p className="text-white/40 text-xs font-bold tracking-widest uppercase mb-0.5">Návštěvnická karta</p>
-                  <p className="text-white font-bold text-sm">Berounsko · Brd · Podbrdsko</p>
-                </div>
-                <div className="absolute top-4 right-5 px-3 py-1.5 rounded-2xl flex items-center gap-1.5" style={{ background: "rgba(255,255,255,0.15)", backdropFilter: "blur(12px)" }}>
-                  <Trophy size={12} color="#fbbf24" />
-                  <span className="text-amber-300 font-black text-sm">{points}</span>
-                  <span className="text-white/50 text-xs">bodů</span>
-                </div>
-                <div className="absolute bottom-4 left-5 right-5 flex items-end justify-between">
-                  <div>
-                    <p className="text-white/40 text-\[11px\] mb-0.5 tracking-widest uppercase">Číslo karty</p>
-                    <p className="text-white font-mono text-sm tracking-widest">•••• •••• 1234</p>
+              {/* Registrace výzva nebo uvítání */}
+              {!isRegistered ? (
+                <motion.div
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mx-5 mb-5 rounded-3xl overflow-hidden shadow-lg"
+                  style={{ background: "linear-gradient(135deg, #0a2540, #1a4570 60%, #0d3d2a)" }}
+                >
+                  <div className="p-5">
+                    <div className="text-3xl mb-3">🎟</div>
+                    <p className="font-black text-lg text-white mb-1" style={{ fontFamily: "var(--font-outfit)" }}>
+                      Proměňte body za volné vstupenky
+                    </p>
+                    <p className="text-sm mb-4" style={{ color: "rgba(255,255,255,0.60)" }}>
+                      Zaregistrujte se, sbírejte body za návštěvy a získejte vstupenky zdarma do Koněpruských jeskyní, na Karlštejn a dalších míst.
+                    </p>
+                    <motion.button
+                      whileTap={{ scale: 0.97 }}
+                      onClick={() => router.push("/register")}
+                      className="w-full py-3.5 rounded-2xl font-bold text-sm"
+                      style={{ background: "rgba(255,255,255,0.15)", color: "white", border: "1px solid rgba(255,255,255,0.25)", backdropFilter: "blur(12px)" }}
+                    >
+                      Zaregistrovat se zdarma →
+                    </motion.button>
                   </div>
-                  <div className="text-right">
-                    <p className="text-white/40 text-\[11px\] mb-0.5">Jan Novák</p>
-                    <div className="flex items-center gap-1">
-                      <div className="w-1.5 h-1.5 rounded-full bg-green-400" />
-                      <span className="text-green-300 text-xs font-bold">Aktivní</span>
-                    </div>
+                </motion.div>
+              ) : (
+                <div className="px-5 mb-5">
+                  <p className="text-xs font-semibold mb-0.5" style={{ color: "var(--text-muted)" }}>Přihlášen jako</p>
+                  <h1 className="font-black text-2xl" style={{ color: "var(--text-main)", fontFamily: "var(--font-outfit)" }}>
+                    {userName}
+                  </h1>
+                </div>
+              )}
+
+              {/* Body přehled */}
+              <div className="px-5 mb-6">
+                <div className="glass rounded-3xl p-4 shadow-sm flex items-center gap-4">
+                  <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0" style={{ background: "rgba(251,191,36,0.12)" }}>
+                    🏆
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-semibold mb-0.5" style={{ color: "var(--text-muted)" }}>Vaše body</p>
+                    <p className="font-black text-3xl leading-none" style={{ color: "var(--text-main)", fontFamily: "var(--font-outfit)" }}>
+                      {points} <span className="text-base font-bold" style={{ color: "var(--text-muted)" }}>bodů</span>
+                    </p>
+                  </div>
+                  <div className="text-right flex-shrink-0">
+                    <p className="text-xs" style={{ color: "var(--text-muted)" }}>Ušetřeno</p>
+                    <p className="font-black text-base" style={{ color: "var(--green)" }}>{savingsKc} Kč</p>
+                    <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>{visits}× navštíveno</p>
                   </div>
                 </div>
-              </motion.div>
+              </div>
 
-              {/* Stats */}
-              <div className="grid grid-cols-3 gap-3 mb-5">
-                {[
-                  { label: "Berounské body", value: points, icon: Trophy, color: "#d97706", suffix: "" },
-                  { label: "Ušetřeno", value: savingsKc, icon: Sparkles, color: "#1a7a5e", suffix: "Kč" },
-                  { label: "Navštíveno", value: visits, icon: MapPin, color: "#2563eb", suffix: "×" },
-                ].map(stat => {
-                  const Icon = stat.icon;
+              {/* Volné vstupenky */}
+              <div className="px-5 mb-2">
+                <p className="font-black text-lg mb-1" style={{ color: "var(--text-main)", fontFamily: "var(--font-outfit)" }}>Volné vstupenky</p>
+                <p className="text-xs mb-4" style={{ color: "var(--text-muted)" }}>Nasbírejte body a odemkněte vstup zdarma</p>
+              </div>
+
+              {/* Ticket cards */}
+              <div className="px-5 flex flex-col gap-3 mb-6">
+                {places.filter(p => p.ticketCost).sort((a, b) => (a.ticketCost ?? 0) - (b.ticketCost ?? 0)).map((place, i) => {
+                  const cost = place.ticketCost!;
+                  const unlocked = isTicketUnlocked(place.id);
+                  const progress = Math.min(points / cost, 1);
+                  const canUnlock = points >= cost && !unlocked;
+
                   return (
                     <motion.div
-                      key={stat.label}
-                      initial={{ opacity: 0, y: 12 }}
+                      key={place.id}
+                      initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="glass rounded-2xl p-3 flex flex-col items-center gap-1.5 shadow-sm"
+                      transition={{ delay: i * 0.04, type: "spring" as const, stiffness: 380 }}
+                      className="glass rounded-3xl overflow-hidden shadow-sm"
+                      style={unlocked ? { border: "1.5px solid rgba(26,122,94,0.35)", background: "rgba(26,122,94,0.05)" } : {}}
                     >
-                      <Icon size={16} color={stat.color} />
-                      <p className="font-black text-lg leading-none" style={{ color: "var(--text-main)" }}>
-                        {stat.value}
-                        <span className="text-xs font-bold ml-0.5" style={{ color: stat.color }}>{stat.suffix}</span>
-                      </p>
-                      <p className="text-\[11px\] text-center leading-tight" style={{ color: "var(--text-muted)" }}>{stat.label}</p>
+                      <div className="flex items-center gap-3 p-3">
+                        <div className="relative flex-shrink-0">
+                          <img src={place.img} alt={place.name} className="w-16 h-16 rounded-2xl object-cover" style={{ filter: unlocked ? "none" : "brightness(0.85)" }} />
+                          {unlocked && (
+                            <div className="absolute inset-0 rounded-2xl flex items-center justify-center" style={{ background: "rgba(26,122,94,0.55)" }}>
+                              <span className="text-xl">🎟</span>
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-bold text-sm leading-tight mb-0.5" style={{ color: "var(--text-main)" }}>{place.name}</p>
+                          <p className="text-xs mb-2" style={{ color: "var(--text-muted)" }}>
+                            {unlocked ? "Vstupenka odemčena ✓" : `${points} / ${cost} bodů`}
+                          </p>
+                          {!unlocked && (
+                            <div className="h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(0,0,0,0.07)" }}>
+                              <motion.div
+                                initial={{ width: 0 }}
+                                animate={{ width: `${progress * 100}%` }}
+                                transition={{ delay: 0.2 + i * 0.05, duration: 0.6, ease: "easeOut" }}
+                                className="h-full rounded-full"
+                                style={{ background: canUnlock ? "linear-gradient(90deg, #1a7a5e, #2563eb)" : "linear-gradient(90deg, #34d399, #059669)" }}
+                              />
+                            </div>
+                          )}
+                        </div>
+                        {unlocked ? (
+                          <motion.button
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => router.push(`/place/${place.id}`)}
+                            className="flex-shrink-0 px-3 py-2 rounded-xl text-xs font-bold"
+                            style={{ background: "rgba(26,122,94,0.12)", color: "var(--green)" }}
+                          >
+                            Zobrazit
+                          </motion.button>
+                        ) : canUnlock ? (
+                          <motion.button
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => unlockTicket(place.id, cost)}
+                            className="flex-shrink-0 px-3 py-2 rounded-xl text-xs font-bold text-white"
+                            style={{ background: "linear-gradient(135deg, #1a7a5e, #2563eb)" }}
+                          >
+                            Odemknout
+                          </motion.button>
+                        ) : (
+                          <div className="flex-shrink-0 text-right">
+                            <p className="text-xs font-black" style={{ color: "var(--text-main)" }}>{cost}</p>
+                            <p className="text-[10px]" style={{ color: "var(--text-muted)" }}>bodů</p>
+                          </div>
+                        )}
+                      </div>
                     </motion.div>
                   );
                 })}
               </div>
 
-              {/* Streak */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.2 }}
-                className="glass rounded-3xl px-4 py-4 mb-5 flex items-center gap-3 shadow-sm"
-              >
-                <div className="w-11 h-11 rounded-2xl flex items-center justify-center text-xl" style={{ background: "rgba(251,191,36,0.12)" }}>
-                  🔥
-                </div>
-                <div className="flex-1">
-                  <p className="font-bold text-sm" style={{ color: "var(--text-main)" }}>
-                  {streak === 0 ? "Začněte sérii dnes!" : `${streak}denní série!`}
-                </p>
-                <p className="text-xs" style={{ color: "var(--text-muted)" }}>
-                  {streak >= 7 ? "Bonus +50 bodů aktivní" : streak === 0 ? "Navštivte partnera a získejte bonus" : "Pokračuj zítra pro bonus +50 bodů"}
-                </p>
-                </div>
-                <div className="flex gap-1">
-                  {[...Array(7)].map((_, i) => (
-                    <div key={i} className="w-3 h-3 rounded-full" style={{ background: i < streak ? "#fbbf24" : "rgba(0,0,0,0.08)" }} />
+              {/* Jak sbírat body */}
+              <div className="px-5 mb-6">
+                <p className="font-bold text-sm mb-3" style={{ color: "var(--text-main)" }}>Jak sbírat body</p>
+                <div className="flex flex-col gap-2">
+                  {[
+                    { icon: "🏛", text: "Navštivte místo a uplatněte slevu", points: "+20–65 bodů" },
+                    { icon: "🔥", text: "Zachovejte sérii návštěv (7 dní)", points: "+50 bodů bonus" },
+                    { icon: "❤️", text: "Přidejte místo do oblíbených", points: "+5 bodů" },
+                  ].map(item => (
+                    <div key={item.text} className="glass rounded-2xl px-4 py-3 flex items-center gap-3 shadow-sm">
+                      <span className="text-xl flex-shrink-0">{item.icon}</span>
+                      <p className="flex-1 text-sm" style={{ color: "var(--text-sub)" }}>{item.text}</p>
+                      <span className="text-xs font-bold flex-shrink-0" style={{ color: "var(--green)" }}>{item.points}</span>
+                    </div>
                   ))}
                 </div>
-              </motion.div>
-
-              <SavingsHistory />
-
-              {/* Achievements */}
-              <p className="text-xs font-bold uppercase tracking-wider mb-3" style={{ color: "var(--text-muted)" }}>Odznaky</p>
-              <div className="grid grid-cols-2 gap-3 mb-5">
-                {achievements.map((a, i) => (
-                  <motion.div
-                    key={a.id}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.1 + i * 0.06, type: "spring" as const, stiffness: 400 }}
-                    className="glass rounded-2xl p-3 shadow-sm"
-                    style={a.earned ? { border: "1px solid rgba(26,122,94,0.3)", background: "rgba(26,122,94,0.06)" } : {}}
-                  >
-                    <div className="text-2xl mb-2" style={{ filter: a.earned ? "none" : "grayscale(100%) opacity(0.4)" }}>{a.icon}</div>
-                    <p className="font-bold text-xs mb-0.5" style={{ color: "var(--text-main)" }}>{a.label}</p>
-                    <p className="text-xs leading-tight mb-2" style={{ color: "var(--text-muted)" }}>{a.desc}</p>
-                    {!a.earned && a.progress !== undefined && (
-                      <div>
-                        <div className="h-1 rounded-full mb-1" style={{ background: "rgba(0,0,0,0.08)" }}>
-                          <div className="h-full rounded-full" style={{ width: `${(a.progress / (a.total ?? 1)) * 100}%`, background: "linear-gradient(90deg, #1a7a5e, #2563eb)" }} />
-                        </div>
-                        <p className="text-\[11px\]" style={{ color: "var(--text-muted)" }}>{a.progress}/{a.total}</p>
-                      </div>
-                    )}
-                    {a.earned && <p className="text-\[11px\] font-bold" style={{ color: "var(--green)" }}>✓ Získáno</p>}
-                  </motion.div>
-                ))}
               </div>
 
-              {/* Challenges */}
-              <p className="text-xs font-bold uppercase tracking-wider mb-3" style={{ color: "var(--text-muted)" }}>Výzvy tohoto týdne</p>
-              <div className="flex flex-col gap-2 mb-5">
-                {challenges.map((c, i) => (
-                  <motion.div
-                    key={c.label}
-                    initial={{ opacity: 0, x: -16 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.3 + i * 0.08 }}
-                    className="glass rounded-2xl px-4 py-3 flex items-center gap-3 shadow-sm"
-                    style={c.done ? { opacity: 0.45 } : {}}
-                  >
-                    <span className="text-xl">{c.icon}</span>
-                    <div className="flex-1">
-                      <p className="font-bold text-sm" style={{ color: "var(--text-main)", textDecoration: c.done ? "line-through" : "none" }}>{c.label}</p>
-                      <p className="text-xs" style={{ color: "var(--text-muted)" }}>{c.done ? "Splněno ✓" : `Zbývá: ${c.deadline}`}</p>
-                    </div>
-                    <div className="px-2.5 py-1.5 rounded-xl flex items-center gap-1" style={{ background: "rgba(251,191,36,0.12)", border: "1px solid rgba(217,119,6,0.2)" }}>
-                      <Zap size={10} color="#d97706" />
-                      <span className="font-black text-xs" style={{ color: "#d97706" }}>+{c.reward}</span>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-
-              {/* QR */}
-              <div className="glass rounded-3xl p-5 flex flex-col items-center shadow-sm">
-                <div className="w-32 h-32 bg-white rounded-2xl flex items-center justify-center mb-3 shadow-sm">
-                  <QrCode size={56} color="#0f2547" strokeWidth={1.5} />
+              {/* QR kód pro slevy */}
+              <div className="px-5">
+                <div className="glass rounded-3xl p-5 flex flex-col items-center shadow-sm">
+                  <div className="w-32 h-32 bg-white rounded-2xl flex items-center justify-center mb-3 shadow-sm">
+                    <QrCode size={56} color="#0f2547" strokeWidth={1.5} />
+                  </div>
+                  <p className="text-sm font-semibold mb-1" style={{ color: "var(--text-main)" }}>QR kód pro slevy</p>
+                  <p className="text-xs text-center" style={{ color: "var(--text-muted)" }}>Ukažte u pokladny pro uplatnění slevy</p>
                 </div>
-                <p className="text-xs text-center" style={{ color: "var(--text-muted)" }}>Ukažte QR kód u partnera</p>
               </div>
             </div>
           </motion.div>

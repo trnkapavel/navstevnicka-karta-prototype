@@ -4,7 +4,7 @@ import { use, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeft, MapPin, Clock, Phone, Star, Heart, Share2,
-  Navigation, Sparkles, X, Coins,
+  Navigation, Sparkles, X, Coins, QrCode,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { places } from "@/data/places";
@@ -16,7 +16,7 @@ export default function PlaceDetail({ params }: { params: Promise<{ id: string }
   const { id } = use(params);
   const router = useRouter();
   const place = places.find((p) => p.id === id);
-  const { isFavorite, toggleFavorite, hasRedeemed } = useGame();
+  const { isFavorite, toggleFavorite, hasRedeemed, isTicketUnlocked } = useGame();
   const [showDiscount, setShowDiscount] = useState(false);
   const [sheetExpanded, setSheetExpanded] = useState(false);
   const dragStartY = useRef(0);
@@ -37,6 +37,7 @@ export default function PlaceDetail({ params }: { params: Promise<{ id: string }
   );
   const liked = isFavorite(place.id);
   const redeemed = hasRedeemed(place.id);
+  const ticketUnlocked = isTicketUnlocked(place.id);
   const related = places.filter((p) => p.id !== place.id && p.category === place.category).slice(0, 4);
 
   return (
@@ -170,6 +171,34 @@ export default function PlaceDetail({ params }: { params: Promise<{ id: string }
               </motion.button>
             ))}
           </div>
+
+          {/* Odemčená vstupenka */}
+          {ticketUnlocked && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="rounded-3xl p-4 mb-5 relative overflow-hidden"
+              style={{ background: "linear-gradient(135deg, #0a2540, #1a4570 60%, #0d3d2a)", boxShadow: "0 8px 32px rgba(10,37,64,0.25)" }}
+            >
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-11 h-11 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0" style={{ background: "rgba(255,255,255,0.12)" }}>
+                  🎟
+                </div>
+                <div className="flex-1">
+                  <p className="font-black text-base text-white" style={{ fontFamily: "var(--font-outfit)" }}>Vstupenka zdarma</p>
+                  <p className="text-xs" style={{ color: "rgba(255,255,255,0.55)" }}>Platná vstupenka — ukažte u pokladny</p>
+                </div>
+              </div>
+              <div className="flex justify-center mb-3">
+                <div className="w-36 h-36 bg-white rounded-2xl flex items-center justify-center shadow-lg">
+                  <QrCode size={80} color="#0a2540" strokeWidth={1.5} />
+                </div>
+              </div>
+              <p className="text-center text-xs font-mono tracking-widest" style={{ color: "rgba(255,255,255,0.40)" }}>
+                TICKET-{place.id.toUpperCase().slice(0, 6)}-2026
+              </p>
+            </motion.div>
+          )}
 
           {/* Savings card */}
           <motion.div

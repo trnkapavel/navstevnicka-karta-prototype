@@ -1,21 +1,41 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { ArrowLeft, Eye, EyeOff } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { motion } from "framer-motion";
+import { ArrowLeft } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useGame } from "@/lib/game-context";
 
 export default function RegisterPage() {
   const router = useRouter();
-  const [showPass, setShowPass] = useState(false);
+  const { register } = useGame();
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [gdpr, setGdpr] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleSubmit = () => {
+    if (!firstName.trim() || !email.trim()) {
+      setError("Vyplňte prosím jméno a e-mail.");
+      return;
+    }
+    if (!gdpr) {
+      setError("Potřebujeme souhlas se zpracováním údajů.");
+      return;
+    }
+    register(`${firstName.trim()} ${lastName.trim()}`.trim(), email.trim());
+    router.push("/");
+  };
 
   return (
-    <main className="h-full w-full max-w-[430px] mx-auto relative overflow-hidden bg-white shadow-2xl flex flex-col">
+    <main className="h-full w-full max-w-[430px] mx-auto relative overflow-hidden shadow-2xl flex flex-col" style={{ background: "var(--bg-main)" }}>
       {/* Header */}
-      <div className="flex-shrink-0 px-5 pt-14 pb-5 safe-top" style={{ background: "#0f2547" }}>
+      <div className="flex-shrink-0 px-5 pt-14 pb-6 safe-top" style={{ background: "linear-gradient(135deg, #0a2540, #1a4570)" }}>
         <button
           onClick={() => router.back()}
-          className="flex items-center gap-2 text-white/60 mb-6 active:text-white transition-colors"
+          className="flex items-center gap-2 mb-6 active:opacity-70 transition-opacity"
+          style={{ color: "rgba(255,255,255,0.55)" }}
         >
           <ArrowLeft size={20} />
           <span className="text-sm">Zpět</span>
@@ -25,8 +45,13 @@ export default function RegisterPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ type: "spring", stiffness: 300, damping: 28 }}
         >
-          <h1 className="text-2xl font-bold text-white mb-1">Registrace</h1>
-          <p className="text-white/60 text-sm">Zaregistruj se a získej svou kartu zdarma</p>
+          <div className="text-3xl mb-3">🎟</div>
+          <h1 className="text-2xl font-black text-white mb-1" style={{ fontFamily: "var(--font-outfit)" }}>
+            Získejte kartu zdarma
+          </h1>
+          <p className="text-sm" style={{ color: "rgba(255,255,255,0.55)" }}>
+            Sbírejte body a proměňte je za volné vstupenky do regionu.
+          </p>
         </motion.div>
       </div>
 
@@ -35,134 +60,102 @@ export default function RegisterPage() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.15, type: "spring", stiffness: 280 }}
+          transition={{ delay: 0.1, type: "spring", stiffness: 280 }}
           className="flex flex-col gap-4"
         >
-          {/* Name row */}
+          {/* Name */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">
-                Jméno
+              <label className="block text-xs font-bold uppercase tracking-wide mb-1.5" style={{ color: "var(--text-muted)" }}>
+                Jméno *
               </label>
               <input
                 type="text"
                 placeholder="Jan"
-                className="w-full px-4 py-3.5 rounded-xl border border-gray-200 text-gray-900 placeholder-gray-400 text-base focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 transition-all"
+                value={firstName}
+                onChange={e => setFirstName(e.target.value)}
+                className="w-full px-4 py-3.5 rounded-2xl text-base focus:outline-none"
+                style={{ background: "rgba(255,255,255,0.80)", border: "1.5px solid rgba(0,0,0,0.08)", color: "var(--text-main)" }}
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">
+              <label className="block text-xs font-bold uppercase tracking-wide mb-1.5" style={{ color: "var(--text-muted)" }}>
                 Příjmení
               </label>
               <input
                 type="text"
                 placeholder="Novák"
-                className="w-full px-4 py-3.5 rounded-xl border border-gray-200 text-gray-900 placeholder-gray-400 text-base focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 transition-all"
+                value={lastName}
+                onChange={e => setLastName(e.target.value)}
+                className="w-full px-4 py-3.5 rounded-2xl text-base focus:outline-none"
+                style={{ background: "rgba(255,255,255,0.80)", border: "1.5px solid rgba(0,0,0,0.08)", color: "var(--text-main)" }}
               />
             </div>
           </div>
 
           {/* Email */}
           <div>
-            <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">
-              E-mail
+            <label className="block text-xs font-bold uppercase tracking-wide mb-1.5" style={{ color: "var(--text-muted)" }}>
+              E-mail *
             </label>
             <input
               type="email"
               placeholder="jan@email.cz"
-              className="w-full px-4 py-3.5 rounded-xl border border-gray-200 text-gray-900 placeholder-gray-400 text-base focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 transition-all"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              className="w-full px-4 py-3.5 rounded-2xl text-base focus:outline-none"
+              style={{ background: "rgba(255,255,255,0.80)", border: "1.5px solid rgba(0,0,0,0.08)", color: "var(--text-main)" }}
             />
-          </div>
-
-          {/* Password */}
-          <div>
-            <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">
-              Heslo
-            </label>
-            <div className="relative">
-              <input
-                type={showPass ? "text" : "password"}
-                placeholder="Alespoň 8 znaků"
-                className="w-full px-4 py-3.5 pr-12 rounded-xl border border-gray-200 text-gray-900 placeholder-gray-400 text-base focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 transition-all"
-              />
-              <button
-                onClick={() => setShowPass(!showPass)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"
-              >
-                {showPass ? <EyeOff size={18} /> : <Eye size={18} />}
-              </button>
-            </div>
-          </div>
-
-          {/* Country / Age */}
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">
-                Věk
-              </label>
-              <select className="w-full px-4 py-3.5 rounded-xl border border-gray-200 text-gray-700 text-base focus:outline-none focus:border-blue-500 transition-all appearance-none bg-white">
-                <option value="">Vyberte</option>
-                <option>15–25</option>
-                <option>26–40</option>
-                <option>41–60</option>
-                <option>60+</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">
-                Země
-              </label>
-              <select className="w-full px-4 py-3.5 rounded-xl border border-gray-200 text-gray-700 text-base focus:outline-none focus:border-blue-500 transition-all appearance-none bg-white">
-                <option>Česká republika</option>
-                <option>Slovensko</option>
-                <option>Jiná</option>
-              </select>
-            </div>
           </div>
 
           {/* GDPR */}
-          <div className="flex gap-3 items-start pt-2">
-            <input
-              type="checkbox"
-              id="gdpr"
-              className="mt-0.5 w-4 h-4 rounded accent-blue-600 flex-shrink-0"
-            />
-            <label htmlFor="gdpr" className="text-xs text-gray-500 leading-relaxed">
+          <label className="flex gap-3 items-start cursor-pointer">
+            <div
+              onClick={() => setGdpr(v => !v)}
+              className="mt-0.5 w-5 h-5 rounded-md flex items-center justify-center flex-shrink-0 transition-all"
+              style={{ background: gdpr ? "#1a7a5e" : "rgba(255,255,255,0.8)", border: gdpr ? "none" : "1.5px solid rgba(0,0,0,0.15)" }}
+            >
+              {gdpr && <span className="text-white text-xs font-bold">✓</span>}
+            </div>
+            <span className="text-xs leading-relaxed" style={{ color: "var(--text-muted)" }}>
               Souhlasím se{" "}
-              <span className="text-blue-600 underline underline-offset-2">zpracováním osobních údajů</span>{" "}
+              <span style={{ color: "var(--green)", textDecoration: "underline" }}>zpracováním osobních údajů</span>{" "}
               za účelem aktivace Návštěvnické karty.
-            </label>
-          </div>
+            </span>
+          </label>
 
-          {/* Newsletter */}
-          <div className="flex gap-3 items-start">
-            <input
-              type="checkbox"
-              id="newsletter"
-              className="mt-0.5 w-4 h-4 rounded accent-blue-600 flex-shrink-0"
-            />
-            <label htmlFor="newsletter" className="text-xs text-gray-500 leading-relaxed">
-              Chci dostávat novinky o akcích a slevách v regionu.
-            </label>
+          {error && (
+            <p className="text-sm font-medium" style={{ color: "#ef4444" }}>{error}</p>
+          )}
+
+          {/* Benefit přehled */}
+          <div className="rounded-3xl p-4 mt-2" style={{ background: "rgba(26,122,94,0.07)", border: "1px solid rgba(26,122,94,0.14)" }}>
+            <p className="font-bold text-sm mb-3" style={{ color: "var(--text-main)" }}>Co získáte registrací</p>
+            {[
+              { icon: "🎟", text: "Volné vstupenky za nasbírané body" },
+              { icon: "💳", text: "Slevy 10–25 % u 20+ partnerů v regionu" },
+              { icon: "🏆", text: "Body za každou návštěvu, soutěže" },
+            ].map(item => (
+              <div key={item.text} className="flex items-center gap-2.5 mb-2 last:mb-0">
+                <span className="text-base">{item.icon}</span>
+                <span className="text-sm" style={{ color: "var(--text-sub)" }}>{item.text}</span>
+              </div>
+            ))}
           </div>
         </motion.div>
       </div>
 
       {/* Submit */}
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3, type: "spring" }}
-        className="flex-shrink-0 px-5 pb-8 pt-4 safe-bottom border-t border-gray-100"
-      >
-        <button
-          onClick={() => router.push("/")}
-          className="w-full py-4 rounded-2xl font-bold text-base text-white active:scale-95 transition-transform shadow-lg"
-          style={{ background: "linear-gradient(135deg, #1b3a6b, #2d5a9e)" }}
+      <div className="flex-shrink-0 px-5 pb-8 pt-4 safe-bottom" style={{ borderTop: "1px solid var(--border)", background: "rgba(240,245,242,0.95)", backdropFilter: "blur(20px)" }}>
+        <motion.button
+          whileTap={{ scale: 0.97 }}
+          onClick={handleSubmit}
+          className="w-full py-4 rounded-2xl font-bold text-base text-white shadow-lg"
+          style={{ background: "linear-gradient(135deg, #1a7a5e, #2563eb)" }}
         >
-          Zaregistrovat se
-        </button>
-      </motion.div>
+          Zaregistrovat se a sbírat body
+        </motion.button>
+      </div>
     </main>
   );
 }

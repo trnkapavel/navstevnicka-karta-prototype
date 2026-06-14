@@ -27,6 +27,7 @@ export interface Place {
   lat: number;
   lng: number;
   aiTags: string[];
+  ticketCost?: number;
 }
 
 export const places: Place[] = [
@@ -57,6 +58,7 @@ export const places: Place[] = [
     phone: "+420 311 686 035",
     lat: 49.9125, lng: 14.0711,
     aiTags: ["jeskyně", "krápník", "příroda", "geologie", "výlet", "rodina", "děti", "vzdělání"],
+    ticketCost: 300,
   },
   {
     id: "hrad-tocnik",
@@ -103,6 +105,7 @@ export const places: Place[] = [
     phone: "+420 311 533 127",
     lat: 49.8875, lng: 13.9050,
     aiTags: ["hrad", "muzeum", "kultura", "gotika", "prohlídka", "průvodce", "historie", "středověk"],
+    ticketCost: 240,
   },
   {
     id: "aquapark-beroun",
@@ -126,6 +129,7 @@ export const places: Place[] = [
     phone: "+420 311 622 455",
     lat: 49.9583, lng: 14.0706,
     aiTags: ["bazén", "aquapark", "tobogán", "voda", "rodina", "děti", "sport", "léto", "plavání"],
+    ticketCost: 500,
   },
   {
     id: "hostomicky-pivovar",
@@ -150,6 +154,7 @@ export const places: Place[] = [
     phone: "+420 311 582 151",
     lat: 49.8444, lng: 14.0333,
     aiTags: ["pivovar", "pivo", "prohlídka", "ochutnávka", "kultura", "tradice", "řemeslo", "večer", "gastronomie"],
+    ticketCost: 280,
   },
   {
     id: "naucna-stezka-brdy",
@@ -195,6 +200,7 @@ export const places: Place[] = [
     phone: "+420 311 672 211",
     lat: 49.9083, lng: 14.0083,
     aiTags: ["zámek", "park", "zahrada", "kultura", "barok", "architektura", "výlet", "romantika", "příroda"],
+    ticketCost: 180,
   },
   {
     id: "restaurace-sv-jan",
@@ -264,6 +270,7 @@ export const places: Place[] = [
     phone: "+420 313 558 440",
     lat: 50.0417, lng: 13.8694,
     aiTags: ["hrad", "gotika", "UNESCO", "kultura", "muzeum", "prohlídka", "křivoklát", "výlet", "středověk"],
+    ticketCost: 320,
   },
   // ── Nová místa ──
   {
@@ -288,6 +295,7 @@ export const places: Place[] = [
     phone: "+420 311 681 617",
     lat: 49.9394, lng: 14.1884,
     aiTags: ["hrad", "gotika", "UNESCO", "Karel IV", "kultura", "výlet", "ikonické", "korunovační klenoty"],
+    ticketCost: 400,
   },
   {
     id: "solvayovy-lomy",
@@ -356,6 +364,7 @@ export const places: Place[] = [
     phone: "+420 311 622 133",
     lat: 49.9561, lng: 14.0583,
     aiTags: ["medvědi", "zoo", "děti", "zvířata", "zážitek", "rodina", "příroda", "záchranné centrum"],
+    ticketCost: 260,
   },
   {
     id: "zamek-horovice",
@@ -378,6 +387,7 @@ export const places: Place[] = [
     phone: "+420 311 514 119",
     lat: 49.8486, lng: 13.9003,
     aiTags: ["zámek", "barok", "park", "muzeum", "porcelán", "architektura", "prohlídka", "hořovice"],
+    ticketCost: 220,
   },
   {
     id: "velka-amerika",
