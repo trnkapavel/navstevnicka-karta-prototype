@@ -103,8 +103,8 @@ export default function OnboardingFlow() {
         </motion.div>
       </AnimatePresence>
 
-      {/* Dots indicator */}
-      <div className="absolute bottom-0 left-0 right-0 pb-safe flex justify-center gap-2 pb-8 z-50 pointer-events-none">
+      {/* Dots indicator — pozice nad CTA tlačítkem (~80px od spodku) */}
+      <div className="absolute bottom-0 left-0 right-0 flex justify-center gap-2 z-50 pointer-events-none" style={{ paddingBottom: "calc(88px + env(safe-area-inset-bottom, 16px))" }}>
         {SLIDES.map((_, i) => (
           <motion.button
             key={i}
