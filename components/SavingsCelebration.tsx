@@ -1,154 +1,227 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, Trophy, X } from "lucide-react";
+import { Sparkles, Trophy, MapPin, CreditCard } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface SavingsCelebrationProps {
   savedKc: number;
   pointsEarned: number;
   placeName: string;
+  placeId?: string;
   leveledUp?: boolean;
   newAchievement?: string;
   onClose: () => void;
+}
+
+// Canvas konfety
+function Confetti() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d")!;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const colors = ["#34d99a", "#1a7a5e", "#2563eb", "#fbbf24", "#ec4899", "#ffffff"];
+    const pieces = Array.from({ length: 120 }, () => ({
+      x: Math.random() * canvas.width,
+      y: -20 - Math.random() * 200,
+      w: 6 + Math.random() * 8,
+      h: 10 + Math.random() * 6,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      rot: Math.random() * Math.PI * 2,
+      vx: -2 + Math.random() * 4,
+      vy: 3 + Math.random() * 5,
+      vrot: (-0.08 + Math.random() * 0.16),
+      opacity: 1,
+    }));
+
+    let raf: number;
+    let frame = 0;
+
+    const draw = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      frame++;
+      for (const p of pieces) {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.rot += p.vrot;
+        if (frame > 80) p.opacity -= 0.012;
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, p.opacity);
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+        ctx.restore();
+      }
+      if (frame < 160) raf = requestAnimationFrame(draw);
+    };
+    draw();
+    return () => cancelAnimationFrame(raf);
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="fixed inset-0 pointer-events-none z-[110]"
+    />
+  );
 }
 
 export default function SavingsCelebration({
   savedKc,
   pointsEarned,
   placeName,
+  placeId,
   leveledUp,
   newAchievement,
   onClose,
 }: SavingsCelebrationProps) {
-  const particles = Array.from({ length: 24 }, (_, i) => ({
-    id: i,
-    x: Math.random() * 100,
-    delay: Math.random() * 0.3,
-    color: ["#52c895", "#f59e0b", "#4a9ede", "#fff", "#e879f9"][i % 5],
-  }));
+  const router = useRouter();
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[100] flex items-end justify-center"
-      style={{ background: "rgba(10,20,15,0.55)", backdropFilter: "blur(8px)" }}
-      onClick={onClose}
-    >
-      {particles.map((p) => (
-        <motion.div
-          key={p.id}
-          className="absolute w-2 h-2 rounded-full pointer-events-none"
-          style={{ left: `${p.x}%`, bottom: "40%", background: p.color }}
-          initial={{ y: 0, opacity: 1, scale: 1 }}
-          animate={{ y: -200 - Math.random() * 150, opacity: 0, scale: 0 }}
-          transition={{ duration: 1.2, delay: p.delay, ease: "easeOut" }}
-        />
-      ))}
+    <>
+      <Confetti />
 
       <motion.div
-        initial={{ y: "100%", scale: 0.95 }}
-        animate={{ y: 0, scale: 1 }}
-        exit={{ y: "100%" }}
-        transition={{ type: "spring", stiffness: 320, damping: 32 }}
-        onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-[430px] glass rounded-t-[32px] p-6 pb-10 safe-bottom relative overflow-hidden"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 z-[105] flex items-end justify-center max-w-[430px] mx-auto"
+        style={{ background: "rgba(8,16,12,0.65)", backdropFilter: "blur(10px)" }}
       >
-        <div className="absolute inset-0 holo-shine opacity-20 pointer-events-none" />
-
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center"
-          style={{ background: "rgba(0,0,0,0.08)" }}
+        <motion.div
+          initial={{ y: "100%" }}
+          animate={{ y: 0 }}
+          exit={{ y: "100%" }}
+          transition={{ type: "spring", stiffness: 320, damping: 32 }}
+          onClick={(e) => e.stopPropagation()}
+          className="w-full rounded-t-[36px] overflow-hidden"
+          style={{ background: "var(--bg-main)" }}
         >
-          <X size={16} color="#6b7280" />
-        </button>
+          {/* Gradient top bar */}
+          <div className="h-1.5 w-full" style={{ background: "linear-gradient(90deg, #34d99a, #1a7a5e, #2563eb)" }} />
 
-        <div className="text-center pt-4">
-          <motion.div
-            initial={{ scale: 0, rotate: -20 }}
-            animate={{ scale: 1, rotate: 0 }}
-            transition={{ type: "spring", stiffness: 400, damping: 18, delay: 0.1 }}
-            className="text-6xl mb-4"
-          >
-            🎉
-          </motion.div>
-
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-gray-500 text-sm mb-1"
-          >
-            Sleva uplatněna u
-          </motion.p>
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.25 }}
-            className="text-gray-900 font-bold text-lg mb-6 line-clamp-1"
-          >
-            {placeName}
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.35, type: "spring" }}
-            className="glass-green rounded-3xl p-5 mb-4"
-          >
-            <p className="text-gray-500 text-xs font-medium uppercase tracking-wider mb-1">Ušetřili jste</p>
-            <p
-              className="font-black text-5xl mb-1"
-              style={{
-                background: "linear-gradient(135deg, #1a7a5e, #2563eb)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-              }}
+          <div className="px-6 pt-6 pb-4 text-center">
+            <motion.div
+              initial={{ scale: 0, rotate: -30 }}
+              animate={{ scale: 1, rotate: 0 }}
+              transition={{ type: "spring", stiffness: 380, damping: 16, delay: 0.1 }}
+              className="text-7xl mb-4 inline-block"
             >
-              {savedKc} Kč
-            </p>
-            <div className="flex items-center justify-center gap-2 mt-3">
-              <Sparkles size={14} color="#f59e0b" />
-              <span className="text-amber-400 font-bold text-sm">+{pointsEarned} Berounských bodů</span>
-            </div>
-          </motion.div>
+              🎉
+            </motion.div>
 
-          <AnimatePresence>
-            {(leveledUp || newAchievement) && (
-              <motion.div
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                className="glass rounded-2xl px-4 py-3 mb-4 flex items-center gap-3"
-                style={{ border: "1px solid rgba(245,158,11,0.3)" }}
+            <motion.p
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="font-black text-2xl mb-1"
+              style={{ color: "var(--text-main)", fontFamily: "var(--font-outfit)" }}
+            >
+              Sleva uplatněna!
+            </motion.p>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.28 }}
+              className="text-base line-clamp-1 mb-6"
+              style={{ color: "var(--text-muted)" }}
+            >
+              {placeName}
+            </motion.p>
+
+            {/* Úspora */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.85 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.32, type: "spring" }}
+              className="rounded-3xl p-5 mb-4"
+              style={{ background: "linear-gradient(135deg, rgba(26,122,94,0.10), rgba(37,99,235,0.07))", border: "1.5px solid rgba(26,122,94,0.20)" }}
+            >
+              <p className="text-sm font-semibold uppercase tracking-widest mb-2" style={{ color: "var(--text-muted)" }}>
+                Ušetřili jste
+              </p>
+              <p
+                className="font-black leading-none mb-3"
+                style={{
+                  fontSize: 56,
+                  background: "linear-gradient(135deg, #1a7a5e, #2563eb)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  fontFamily: "var(--font-outfit)",
+                }}
               >
-                <Trophy size={20} color="#f59e0b" />
-                <div className="text-left">
-                  {leveledUp && (
-                    <p className="text-gray-900 font-bold text-sm">Nová úroveň!</p>
-                  )}
-                  {newAchievement && (
-                    <p className="text-amber-400 text-xs">Odznak: {newAchievement}</p>
-                  )}
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+                {savedKc} Kč
+              </p>
+              <div className="flex items-center justify-center gap-2 py-2 px-4 rounded-2xl inline-flex" style={{ background: "rgba(251,191,36,0.12)" }}>
+                <Sparkles size={16} color="#d97706" />
+                <span className="font-black text-base" style={{ color: "#d97706" }}>+{pointsEarned} bodů připsáno</span>
+              </div>
+            </motion.div>
 
-          <motion.button
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            onClick={onClose}
-            className="w-full py-4 rounded-2xl font-bold text-white active:scale-95 transition-transform"
-            style={{ background: "linear-gradient(135deg, #3d9970, #2d7dd2)" }}
+            {/* Level up / achievement */}
+            <AnimatePresence>
+              {(leveledUp || newAchievement) && (
+                <motion.div
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                  className="glass rounded-2xl px-4 py-3 mb-4 flex items-center gap-3"
+                  style={{ border: "1px solid rgba(245,158,11,0.25)" }}
+                >
+                  <Trophy size={22} color="#d97706" />
+                  <div className="text-left">
+                    {leveledUp && <p className="font-bold text-base" style={{ color: "var(--text-main)" }}>Nová úroveň!</p>}
+                    {newAchievement && <p className="text-sm font-semibold" style={{ color: "#d97706" }}>Odznak: {newAchievement}</p>}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* Kontextové akce */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.45 }}
+            className="px-6 pb-10 safe-bottom flex flex-col gap-3"
           >
-            Skvělé, pokračovat
-          </motion.button>
-        </div>
+            <p className="text-sm font-bold uppercase tracking-widest mb-1" style={{ color: "var(--text-muted)" }}>Co dál?</p>
+
+            <motion.button
+              whileTap={{ scale: 0.97 }}
+              onClick={() => {
+                onClose();
+                router.push("/");
+              }}
+              className="w-full py-4 rounded-2xl font-bold text-base text-white flex items-center justify-center gap-2 shadow-lg"
+              style={{ background: "linear-gradient(135deg, #1a7a5e, #2563eb)" }}
+            >
+              <MapPin size={18} />
+              Objevit další místa
+            </motion.button>
+
+            <motion.button
+              whileTap={{ scale: 0.97 }}
+              onClick={() => {
+                onClose();
+                router.push("/?tab=card");
+              }}
+              className="w-full py-4 rounded-2xl font-bold text-base flex items-center justify-center gap-2"
+              style={{ background: "rgba(255,255,255,0.70)", border: "1.5px solid rgba(0,0,0,0.06)", color: "var(--text-sub)", backdropFilter: "blur(16px)" }}
+            >
+              <CreditCard size={18} />
+              Zobrazit mé body a odměny
+            </motion.button>
+          </motion.div>
+        </motion.div>
       </motion.div>
-    </motion.div>
+    </>
   );
 }
