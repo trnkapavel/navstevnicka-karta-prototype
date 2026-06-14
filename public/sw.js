@@ -1,4 +1,4 @@
-const CACHE = "nk-berounsko-v1";
+const CACHE = "nk-berounsko-v6";
 
 const PRECACHE = [
   "/app",
