@@ -2,7 +2,7 @@
   "name": "Návštěvnická karta Berounska",
   "short_name": "NK Berounsko",
   "description": "Karta pro slevy a výlety v regionu Berounska, Brd a Podbrdska",
-  "start_url": "/app",
+  "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#f0f5f2",
