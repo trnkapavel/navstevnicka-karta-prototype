@@ -91,7 +91,7 @@ export default function DiscountReveal({ discount, free, placeName }: DiscountRe
             {/* Progress ring */}
             <div className="relative w-16 h-16 flex items-center justify-center">
               <svg className="absolute inset-0 -rotate-90" viewBox="0 0 60 60">
-                <circle cx="30" cy="30" r="26" stroke="rgba(255,255,255,0.1)" strokeWidth="3" fill="none" />
+                <circle cx="30" cy="30" r="26" stroke="rgba(0,0,0,0.10)" strokeWidth="3" fill="none" />
                 <motion.circle
                   cx="30" cy="30" r="26"
                   stroke="url(#reveal-grad)"
@@ -111,22 +111,22 @@ export default function DiscountReveal({ discount, free, placeName }: DiscountRe
                 animate={{ scale: phase === "holding" ? [1, 1.1, 1] : 1 }}
                 transition={{ repeat: Infinity, duration: 0.5 }}
                 className="w-10 h-10 rounded-full flex items-center justify-center"
-                style={{ background: "rgba(255,255,255,0.12)" }}
+                style={{ background: "rgba(26,122,94,0.10)" }}
               >
-                <Sparkles size={20} color="rgba(255,255,255,0.7)" />
+                <Sparkles size={20} color="#1a7a5e" />
               </motion.div>
             </div>
 
             <div className="text-center">
-              <p className="text-white/50 text-xs mb-0.5 font-medium">
+              <p className="text-gray-600 text-xs mb-0.5 font-medium">
                 {phase === "holding" ? "Drž pro odhalení…" : "Podržte pro odhalení slevy"}
               </p>
-              <p className="text-white/30 text-xs">{placeName}</p>
+              <p className="text-gray-400 text-xs">{placeName}</p>
             </div>
 
             <div
               className="w-full h-1.5 rounded-full overflow-hidden"
-              style={{ background: "rgba(255,255,255,0.08)" }}
+              style={{ background: "rgba(0,0,0,0.08)" }}
             >
               <motion.div
                 className="h-full rounded-full"

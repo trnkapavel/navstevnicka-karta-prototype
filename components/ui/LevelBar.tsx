@@ -13,10 +13,10 @@ export default function LevelBar({ compact = false }: { compact?: boolean }) {
         <span className="text-lg">{current.emoji}</span>
         <div className="flex-1 min-w-0">
           <div className="flex justify-between text-xs mb-1">
-            <span className="text-white/60 font-semibold">{current.name}</span>
-            <span className="text-white/40">{points} BB</span>
+            <span className="text-gray-600 font-semibold">{current.name}</span>
+            <span className="text-gray-500">{points} bodů</span>
           </div>
-          <div className="h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.08)" }}>
+          <div className="h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(0,0,0,0.08)" }}>
             <motion.div
               className="h-full rounded-full"
               style={{ background: "linear-gradient(90deg, #3d9970, #4a9ede)" }}
@@ -45,15 +45,15 @@ export default function LevelBar({ compact = false }: { compact?: boolean }) {
           {current.emoji}
         </motion.div>
         <div className="flex-1">
-          <p className="text-white/40 text-xs font-bold uppercase tracking-wider">Úroveň {current.id}</p>
-          <p className="text-white font-black text-lg">{current.name}</p>
+          <p className="text-gray-500 text-xs font-bold uppercase tracking-wider">Úroveň {current.id}</p>
+          <p className="text-gray-900 font-black text-lg">{current.name}</p>
         </div>
         <div className="text-right">
-          <p className="text-amber-400 font-black text-xl">{points}</p>
-          <p className="text-white/35 text-xs">Berounské body</p>
+          <p className="text-amber-500 font-black text-xl">{points}</p>
+          <p className="text-gray-500 text-xs">Berounské body</p>
         </div>
       </div>
-      <div className="h-2 rounded-full overflow-hidden mb-1.5" style={{ background: "rgba(255,255,255,0.08)" }}>
+      <div className="h-2 rounded-full overflow-hidden mb-1.5" style={{ background: "rgba(0,0,0,0.08)" }}>
         <motion.div
           className="h-full rounded-full relative overflow-hidden"
           style={{ background: "linear-gradient(90deg, #3d9970, #52c895, #4a9ede)" }}
@@ -65,12 +65,12 @@ export default function LevelBar({ compact = false }: { compact?: boolean }) {
         </motion.div>
       </div>
       {next ? (
-        <p className="text-white/35 text-xs">
-          Do úrovně <span className="text-white/60 font-semibold">{next.name}</span> zbývá{" "}
-          <span className="text-green-400 font-bold">{next.minPoints - points} BB</span>
+        <p className="text-gray-500 text-xs">
+          Do úrovně <span className="text-gray-700 font-semibold">{next.name}</span> zbývá{" "}
+          <span className="text-green-700 font-bold">{next.minPoints - points} bodů</span>
         </p>
       ) : (
-        <p className="text-green-400 text-xs font-semibold">Maximální úroveň dosažena!</p>
+        <p className="text-green-700 text-xs font-semibold">Maximální úroveň dosažena!</p>
       )}
     </motion.div>
   );

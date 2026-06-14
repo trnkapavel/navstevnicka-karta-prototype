@@ -87,7 +87,7 @@ export default function DiscountFlow({
     });
     setCelebration({
       savedKc: discountInfo.estimatedSaving,
-      pointsEarned: discountInfo.pointsReward + 20,
+      pointsEarned: discountInfo.pointsReward,
       leveledUp: result.leveledUp,
       newAchievement: result.newAchievement,
     });
@@ -118,8 +118,8 @@ export default function DiscountFlow({
         className="glass rounded-3xl p-5 text-center"
       >
         <CheckCircle2 size={40} color="#52c895" className="mx-auto mb-3" />
-        <p className="text-white font-bold text-base mb-1">Sleva již uplatněna</p>
-        <p className="text-white/40 text-sm mb-4">U tohoto místa jste slevu již využili.</p>
+        <p className="text-gray-900 font-bold text-base mb-1">Sleva již uplatněna</p>
+        <p className="text-gray-500 text-sm mb-4">U tohoto místa jste slevu již využili.</p>
         <button
           onClick={onClose}
           className="text-green-400 text-sm font-semibold"
@@ -142,7 +142,7 @@ export default function DiscountFlow({
               background:
                 i <= stepIndex
                   ? "linear-gradient(90deg, #3d9970, #4a9ede)"
-                  : "rgba(255,255,255,0.08)",
+                  : "rgba(0,0,0,0.12)",
             }}
           />
         ))}
@@ -158,14 +158,14 @@ export default function DiscountFlow({
             className="glass rounded-3xl p-5"
           >
             <div className="flex items-center gap-2 mb-4">
-              <Tag size={16} color="#52c895" />
-              <p className="text-white font-bold text-sm">Jak uplatnit slevu</p>
+              <Tag size={16} color="#1a7a5e" />
+              <p className="text-gray-900 font-bold text-sm">Jak uplatnit slevu</p>
             </div>
 
             <div className="glass-green rounded-2xl p-4 mb-4 text-center">
-              <p className="text-white/50 text-xs mb-1">Odhadovaná úspora</p>
-              <p className="text-3xl font-black text-green-300">{discountInfo.estimatedSaving} Kč</p>
-              <p className="text-white/40 text-xs mt-1">{discountInfo.description}</p>
+              <p className="text-gray-500 text-xs mb-1">Odhadovaná úspora</p>
+              <p className="text-3xl font-black text-green-700">{discountInfo.estimatedSaving} Kč</p>
+              <p className="text-gray-600 text-xs mt-1">{discountInfo.description}</p>
             </div>
 
             {[
@@ -181,10 +181,10 @@ export default function DiscountFlow({
                 className="flex items-center gap-3 py-2.5"
               >
                 <div className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0"
-                  style={{ background: "rgba(255,255,255,0.06)" }}>
-                  <Icon size={15} color="rgba(255,255,255,0.5)" />
+                  style={{ background: "rgba(26,122,94,0.10)" }}>
+                  <Icon size={15} color="#1a7a5e" />
                 </div>
-                <p className="text-white/70 text-sm">{text}</p>
+                <p className="text-gray-700 text-sm">{text}</p>
               </motion.div>
             ))}
 
@@ -252,12 +252,12 @@ export default function DiscountFlow({
                   </motion.div>
                 </div>
                 <div className="text-center">
-                  <p className="text-white font-bold text-base mb-1">
+                  <p className="text-gray-900 font-bold text-base mb-1">
                     {phase === "holding" ? "Držte…" : "Podržte pro odhalení"}
                   </p>
-                  <p className="text-white/40 text-xs">Vaše sleva se zobrazí jen vám</p>
+                  <p className="text-gray-500 text-xs">Vaše sleva se zobrazí jen vám</p>
                 </div>
-                <div className="w-full h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.06)" }}>
+                <div className="w-full h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(0,0,0,0.08)" }}>
                   <div
                     className="h-full rounded-full transition-all"
                     style={{
@@ -284,7 +284,7 @@ export default function DiscountFlow({
                 >
                   {discountInfo.label}
                 </p>
-                <p className="text-white/60 text-sm">{discountInfo.description}</p>
+                <p className="text-gray-600 text-sm">{discountInfo.description}</p>
               </motion.div>
             )}
           </motion.div>
@@ -298,8 +298,8 @@ export default function DiscountFlow({
             exit={{ opacity: 0, x: -20 }}
             className="glass rounded-3xl p-5"
           >
-            <p className="text-white font-bold text-center mb-1">Ukažte u pokladny</p>
-            <p className="text-white/40 text-xs text-center mb-4">Personál naskenuje QR kód vaší karty</p>
+            <p className="text-gray-900 font-bold text-center mb-1">Ukažte u pokladny</p>
+            <p className="text-gray-500 text-xs text-center mb-4">Personál naskenuje QR kód vaší karty</p>
 
             <motion.div
               animate={{ scale: [1, 1.02, 1] }}
@@ -311,7 +311,7 @@ export default function DiscountFlow({
             </motion.div>
 
             <div className="glass-dark rounded-xl px-3 py-2 mb-4 flex items-center justify-between">
-              <span className="text-white/40 text-xs">Platnost kódu</span>
+              <span className="text-gray-500 text-xs">Platnost kódu</span>
               <span className="text-green-400 text-xs font-bold font-mono">04:59</span>
             </div>
 
@@ -334,10 +334,10 @@ export default function DiscountFlow({
             exit={{ opacity: 0, x: -20 }}
             className="glass rounded-3xl p-5 text-center"
           >
-            <p className="text-white font-bold text-base mb-2">Potvrdit uplatnění?</p>
-            <p className="text-white/40 text-sm mb-4">
+            <p className="text-gray-900 font-bold text-base mb-2">Potvrdit uplatnění?</p>
+            <p className="text-gray-600 text-sm mb-4">
               Přidáme <span className="text-green-400 font-semibold">{discountInfo.estimatedSaving} Kč</span> do vašich úspor
-              a <span className="text-amber-400 font-semibold">+{discountInfo.pointsReward + 20} BB</span>
+              a <span className="text-amber-400 font-semibold">+{discountInfo.pointsReward} Berounských bodů</span>
             </p>
             <motion.button
               whileTap={{ scale: 0.97 }}
@@ -347,7 +347,7 @@ export default function DiscountFlow({
             >
               Ano, sleva uplatněna ✓
             </motion.button>
-            <button onClick={() => setStep("qr")} className="text-white/40 text-sm py-2">
+            <button onClick={() => setStep("qr")} className="text-gray-500 text-sm py-2">
               Zpět k QR kódu
             </button>
           </motion.div>

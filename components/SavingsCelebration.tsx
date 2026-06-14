@@ -33,7 +33,7 @@ export default function SavingsCelebration({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       className="fixed inset-0 z-[100] flex items-end justify-center"
-      style={{ background: "rgba(6,13,26,0.85)", backdropFilter: "blur(12px)" }}
+      style={{ background: "rgba(10,20,15,0.55)", backdropFilter: "blur(8px)" }}
       onClick={onClose}
     >
       {particles.map((p) => (
@@ -60,9 +60,9 @@ export default function SavingsCelebration({
         <button
           onClick={onClose}
           className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center"
-          style={{ background: "rgba(255,255,255,0.1)" }}
+          style={{ background: "rgba(0,0,0,0.08)" }}
         >
-          <X size={16} color="rgba(255,255,255,0.6)" />
+          <X size={16} color="#6b7280" />
         </button>
 
         <div className="text-center pt-4">
@@ -79,7 +79,7 @@ export default function SavingsCelebration({
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-white/50 text-sm mb-1"
+            className="text-gray-500 text-sm mb-1"
           >
             Sleva uplatněna u
           </motion.p>
@@ -87,7 +87,7 @@ export default function SavingsCelebration({
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.25 }}
-            className="text-white font-bold text-lg mb-6 line-clamp-1"
+            className="text-gray-900 font-bold text-lg mb-6 line-clamp-1"
           >
             {placeName}
           </motion.p>
@@ -98,11 +98,11 @@ export default function SavingsCelebration({
             transition={{ delay: 0.35, type: "spring" }}
             className="glass-green rounded-3xl p-5 mb-4"
           >
-            <p className="text-white/50 text-xs font-medium uppercase tracking-wider mb-1">Ušetřili jste</p>
+            <p className="text-gray-500 text-xs font-medium uppercase tracking-wider mb-1">Ušetřili jste</p>
             <p
               className="font-black text-5xl mb-1"
               style={{
-                background: "linear-gradient(135deg, #52c895, #fff)",
+                background: "linear-gradient(135deg, #1a7a5e, #2563eb)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
               }}
@@ -127,7 +127,7 @@ export default function SavingsCelebration({
                 <Trophy size={20} color="#f59e0b" />
                 <div className="text-left">
                   {leveledUp && (
-                    <p className="text-white font-bold text-sm">Nová úroveň!</p>
+                    <p className="text-gray-900 font-bold text-sm">Nová úroveň!</p>
                   )}
                   {newAchievement && (
                     <p className="text-amber-400 text-xs">Odznak: {newAchievement}</p>

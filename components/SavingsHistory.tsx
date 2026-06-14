@@ -14,9 +14,9 @@ export default function SavingsHistory() {
         animate={{ opacity: 1 }}
         className="glass rounded-3xl p-5 text-center mb-5"
       >
-        <TrendingUp size={28} color="rgba(255,255,255,0.2)" className="mx-auto mb-3" />
-        <p className="text-white/50 text-sm mb-1">Zatím žádné úspory</p>
-        <p className="text-white/30 text-xs">Uplatněte první slevu a uvidíte historii zde</p>
+        <TrendingUp size={28} color="#9ca3af" className="mx-auto mb-3" />
+        <p className="text-gray-500 text-sm mb-1">Zatím žádné úspory</p>
+        <p className="text-gray-400 text-xs">Uplatněte první slevu a uvidíte historii zde</p>
       </motion.div>
     );
   }
@@ -24,8 +24,8 @@ export default function SavingsHistory() {
   return (
     <div className="mb-5">
       <div className="flex items-center justify-between mb-3">
-        <p className="text-white/40 text-xs font-bold uppercase tracking-wider">Historie úspor</p>
-        <span className="glass text-green-400 text-xs font-black px-2.5 py-1 rounded-xl">
+        <p className="text-gray-500 text-xs font-bold uppercase tracking-wider">Historie úspor</p>
+        <span className="glass text-green-700 text-xs font-black px-2.5 py-1 rounded-xl">
           {savingsKc} Kč celkem
         </span>
       </div>
@@ -39,17 +39,17 @@ export default function SavingsHistory() {
             className="glass rounded-2xl px-4 py-3 flex items-center gap-3"
           >
             <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
-              style={{ background: "rgba(82,200,149,0.15)" }}>
-              <Tag size={14} color="#52c895" />
+              style={{ background: "rgba(26,122,94,0.10)" }}>
+              <Tag size={14} color="#1a7a5e" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-white font-semibold text-sm line-clamp-1">{r.placeName}</p>
-              <p className="text-white/30 text-xs">
+              <p className="text-gray-900 font-semibold text-sm line-clamp-1">{r.placeName}</p>
+              <p className="text-gray-400 text-xs">
                 {new Date(r.date).toLocaleDateString("cs-CZ", { day: "numeric", month: "short" })}
-                {" · "}+{r.pointsEarned} BB
+                {" · "}+{r.pointsEarned} bodů
               </p>
             </div>
-            <span className="text-green-400 font-black text-sm flex-shrink-0">−{r.savedKc} Kč</span>
+            <span className="text-green-700 font-black text-sm flex-shrink-0">−{r.savedKc} Kč</span>
           </motion.div>
         ))}
       </div>
