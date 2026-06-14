@@ -44,7 +44,7 @@ export default function SavingsHistory() {
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-white font-semibold text-sm line-clamp-1">{r.placeName}</p>
-              <p className="text-white/30 text-[10px]">
+              <p className="text-white/30 text-xs">
                 {new Date(r.date).toLocaleDateString("cs-CZ", { day: "numeric", month: "short" })}
                 {" · "}+{r.pointsEarned} BB
               </p>

@@ -12,7 +12,7 @@ export default function LevelBar({ compact = false }: { compact?: boolean }) {
       <div className="flex items-center gap-2">
         <span className="text-lg">{current.emoji}</span>
         <div className="flex-1 min-w-0">
-          <div className="flex justify-between text-[10px] mb-1">
+          <div className="flex justify-between text-xs mb-1">
             <span className="text-white/60 font-semibold">{current.name}</span>
             <span className="text-white/40">{points} BB</span>
           </div>
@@ -45,12 +45,12 @@ export default function LevelBar({ compact = false }: { compact?: boolean }) {
           {current.emoji}
         </motion.div>
         <div className="flex-1">
-          <p className="text-white/40 text-[10px] font-bold uppercase tracking-wider">Úroveň {current.id}</p>
+          <p className="text-white/40 text-xs font-bold uppercase tracking-wider">Úroveň {current.id}</p>
           <p className="text-white font-black text-lg">{current.name}</p>
         </div>
         <div className="text-right">
           <p className="text-amber-400 font-black text-xl">{points}</p>
-          <p className="text-white/35 text-[10px]">Berounské body</p>
+          <p className="text-white/35 text-xs">Berounské body</p>
         </div>
       </div>
       <div className="h-2 rounded-full overflow-hidden mb-1.5" style={{ background: "rgba(255,255,255,0.08)" }}>
@@ -65,12 +65,12 @@ export default function LevelBar({ compact = false }: { compact?: boolean }) {
         </motion.div>
       </div>
       {next ? (
-        <p className="text-white/35 text-[11px]">
+        <p className="text-white/35 text-xs">
           Do úrovně <span className="text-white/60 font-semibold">{next.name}</span> zbývá{" "}
           <span className="text-green-400 font-bold">{next.minPoints - points} BB</span>
         </p>
       ) : (
-        <p className="text-green-400 text-[11px] font-semibold">Maximální úroveň dosažena!</p>
+        <p className="text-green-400 text-xs font-semibold">Maximální úroveň dosažena!</p>
       )}
     </motion.div>
   );

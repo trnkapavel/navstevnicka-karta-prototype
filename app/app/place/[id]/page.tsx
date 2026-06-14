@@ -93,7 +93,7 @@ export default function PlaceDetail({ params }: { params: Promise<{ id: string }
             <DiscountBadge info={discountInfo} size="lg" />
             {redeemed && (
               <span
-                className="text-[10px] font-bold px-2.5 py-1 rounded-xl"
+                className="text-xs font-bold px-2.5 py-1 rounded-xl"
                 style={{ background: "rgba(26,122,94,0.9)", color: "white", backdropFilter: "blur(8px)" }}
               >
                 ✓ Uplatněno
@@ -170,7 +170,7 @@ export default function PlaceDetail({ params }: { params: Promise<{ id: string }
                 <p className="text-2xl font-black" style={{ color: "var(--green)" }}>{discountInfo.estimatedSaving} Kč</p>
               </div>
               <div className="text-right">
-                <p className="text-[10px]" style={{ color: "var(--text-muted)" }}>+ body</p>
+                <p className="text-xs" style={{ color: "var(--text-muted)" }}>+ body</p>
                 <p className="font-black text-sm" style={{ color: "#d97706" }}>+{place.pointsReward} BB</p>
               </div>
             </div>
@@ -197,7 +197,7 @@ export default function PlaceDetail({ params }: { params: Promise<{ id: string }
                   <Icon size={16} color={color} />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-[10px] font-bold uppercase tracking-wider mb-0.5" style={{ color: "var(--text-muted)" }}>{label}</p>
+                  <p className="text-xs font-bold uppercase tracking-wider mb-0.5" style={{ color: "var(--text-muted)" }}>{label}</p>
                   <p className="text-sm font-medium line-clamp-2" style={{ color: "var(--text-main)" }}>{value}</p>
                 </div>
                 {extra && (
@@ -230,7 +230,7 @@ export default function PlaceDetail({ params }: { params: Promise<{ id: string }
                       <div className="p-3">
                         <p className="font-semibold text-xs line-clamp-1" style={{ color: "var(--text-main)" }}>{r.name}</p>
                         <div className="flex items-center justify-between mt-1">
-                          <span className="text-[10px]" style={{ color: "var(--text-muted)" }}>{r.distance} km</span>
+                          <span className="text-xs" style={{ color: "var(--text-muted)" }}>{r.distance} km</span>
                           <DiscountBadge info={ri} size="sm" />
                         </div>
                       </div>

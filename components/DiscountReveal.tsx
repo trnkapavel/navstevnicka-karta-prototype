@@ -121,7 +121,7 @@ export default function DiscountReveal({ discount, free, placeName }: DiscountRe
               <p className="text-white/50 text-xs mb-0.5 font-medium">
                 {phase === "holding" ? "Drž pro odhalení…" : "Podržte pro odhalení slevy"}
               </p>
-              <p className="text-white/30 text-[11px]">{placeName}</p>
+              <p className="text-white/30 text-xs">{placeName}</p>
             </div>
 
             <div

@@ -52,16 +52,16 @@ function HotDealCard({ place, onClick }: { place: typeof places[0]; onClick: () 
       </div>
       <div className="absolute top-3 left-3 flex items-center gap-1 px-2 py-1 rounded-xl" style={{ background: "rgba(255,255,255,0.25)", backdropFilter: "blur(12px)" }}>
         <Flame size={11} color="#d97706" />
-        <span className="text-[10px] font-bold" style={{ color: "#92400e" }}>HOT</span>
+        <span className="text-xs font-bold" style={{ color: "#92400e" }}>HOT</span>
       </div>
       <div className="absolute bottom-0 left-0 right-0 p-3">
         <p className="text-white font-bold text-xs leading-tight line-clamp-2">{place.name}</p>
         <div className="flex items-center gap-1 mt-1">
           <MapPin size={9} color="rgba(255,255,255,0.6)" />
-          <span className="text-white/60 text-[10px]">{place.distance} km</span>
+          <span className="text-white/60 text-xs">{place.distance} km</span>
           <span className="text-white/30 ml-1">·</span>
           <Star size={9} color="#fbbf24" fill="#fbbf24" />
-          <span className="text-white/80 text-[10px] font-medium">{place.rating}</span>
+          <span className="text-white/80 text-xs font-medium">{place.rating}</span>
         </div>
       </div>
     </motion.button>
@@ -286,7 +286,7 @@ export default function AppPage() {
                           </button>
                         </div>
                         <div className="flex-1 px-3 py-3 min-w-0">
-                          <p className="text-[10px] font-bold uppercase tracking-wider mb-0.5" style={{ color: "var(--green-mid)" }}>
+                          <p className="text-xs font-bold uppercase tracking-wider mb-0.5" style={{ color: "var(--green-mid)" }}>
                             {place.category}
                           </p>
                           <p className="font-bold text-sm line-clamp-1 mb-1.5" style={{ color: "var(--text-main)" }}>
@@ -342,24 +342,24 @@ export default function AppPage() {
                   }}
                 />
                 <div className="absolute top-4 left-5 right-5">
-                  <p className="text-white/40 text-[10px] font-bold tracking-widest uppercase mb-0.5">Návštěvnická karta</p>
+                  <p className="text-white/40 text-xs font-bold tracking-widest uppercase mb-0.5">Návštěvnická karta</p>
                   <p className="text-white font-bold text-sm">Berounsko · Brd · Podbrdsko</p>
                 </div>
                 <div className="absolute top-4 right-5 px-3 py-1.5 rounded-2xl flex items-center gap-1.5" style={{ background: "rgba(255,255,255,0.15)", backdropFilter: "blur(12px)" }}>
                   <Trophy size={12} color="#fbbf24" />
                   <span className="text-amber-300 font-black text-sm">{points}</span>
-                  <span className="text-white/50 text-[10px]">BB</span>
+                  <span className="text-white/50 text-xs">BB</span>
                 </div>
                 <div className="absolute bottom-4 left-5 right-5 flex items-end justify-between">
                   <div>
-                    <p className="text-white/40 text-[9px] mb-0.5 tracking-widest uppercase">Číslo karty</p>
+                    <p className="text-white/40 text-\[11px\] mb-0.5 tracking-widest uppercase">Číslo karty</p>
                     <p className="text-white font-mono text-sm tracking-widest">•••• •••• 1234</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-white/40 text-[9px] mb-0.5">Jan Novák</p>
+                    <p className="text-white/40 text-\[11px\] mb-0.5">Jan Novák</p>
                     <div className="flex items-center gap-1">
                       <div className="w-1.5 h-1.5 rounded-full bg-green-400" />
-                      <span className="text-green-300 text-[10px] font-bold">Aktivní</span>
+                      <span className="text-green-300 text-xs font-bold">Aktivní</span>
                     </div>
                   </div>
                 </div>
@@ -383,9 +383,9 @@ export default function AppPage() {
                       <Icon size={16} color={stat.color} />
                       <p className="font-black text-lg leading-none" style={{ color: "var(--text-main)" }}>
                         {stat.value}
-                        <span className="text-[11px] font-bold ml-0.5" style={{ color: stat.color }}>{stat.suffix}</span>
+                        <span className="text-xs font-bold ml-0.5" style={{ color: stat.color }}>{stat.suffix}</span>
                       </p>
-                      <p className="text-[9px] text-center leading-tight" style={{ color: "var(--text-muted)" }}>{stat.label}</p>
+                      <p className="text-\[11px\] text-center leading-tight" style={{ color: "var(--text-muted)" }}>{stat.label}</p>
                     </motion.div>
                   );
                 })}
@@ -432,16 +432,16 @@ export default function AppPage() {
                   >
                     <div className="text-2xl mb-2" style={{ filter: a.earned ? "none" : "grayscale(100%) opacity(0.4)" }}>{a.icon}</div>
                     <p className="font-bold text-xs mb-0.5" style={{ color: "var(--text-main)" }}>{a.label}</p>
-                    <p className="text-[10px] leading-tight mb-2" style={{ color: "var(--text-muted)" }}>{a.desc}</p>
+                    <p className="text-xs leading-tight mb-2" style={{ color: "var(--text-muted)" }}>{a.desc}</p>
                     {!a.earned && a.progress !== undefined && (
                       <div>
                         <div className="h-1 rounded-full mb-1" style={{ background: "rgba(0,0,0,0.08)" }}>
                           <div className="h-full rounded-full" style={{ width: `${(a.progress / (a.total ?? 1)) * 100}%`, background: "linear-gradient(90deg, #1a7a5e, #2563eb)" }} />
                         </div>
-                        <p className="text-[9px]" style={{ color: "var(--text-muted)" }}>{a.progress}/{a.total}</p>
+                        <p className="text-\[11px\]" style={{ color: "var(--text-muted)" }}>{a.progress}/{a.total}</p>
                       </div>
                     )}
-                    {a.earned && <p className="text-[9px] font-bold" style={{ color: "var(--green)" }}>✓ Získáno</p>}
+                    {a.earned && <p className="text-\[11px\] font-bold" style={{ color: "var(--green)" }}>✓ Získáno</p>}
                   </motion.div>
                 ))}
               </div>
@@ -520,7 +520,7 @@ export default function AppPage() {
                       >
                         <img src={place.img} alt={place.name} className="w-24 h-24 object-cover flex-shrink-0" />
                         <div className="flex-1 px-3 py-3 min-w-0">
-                          <p className="text-[10px] font-bold uppercase tracking-wider mb-0.5" style={{ color: "var(--green-mid)" }}>{place.category}</p>
+                          <p className="text-xs font-bold uppercase tracking-wider mb-0.5" style={{ color: "var(--green-mid)" }}>{place.category}</p>
                           <p className="font-bold text-sm line-clamp-1" style={{ color: "var(--text-main)" }}>{place.name}</p>
                           <div className="flex items-center gap-1 mt-1">
                             <MapPin size={9} color="var(--text-muted)" />
@@ -565,7 +565,7 @@ export default function AppPage() {
               </div>
               <div className="flex flex-wrap gap-2 justify-center py-4">
                 {["Berounsko", "Brdy", "Podbrdsko"].map(p => (
-                  <span key={p} className="text-[10px] px-3 py-1 rounded-full" style={{ color: "var(--text-muted)", border: "1px solid var(--border)", background: "rgba(255,255,255,0.5)" }}>
+                  <span key={p} className="text-xs px-3 py-1 rounded-full" style={{ color: "var(--text-muted)", border: "1px solid var(--border)", background: "rgba(255,255,255,0.5)" }}>
                     {p}
                   </span>
                 ))}
@@ -596,7 +596,7 @@ export default function AppPage() {
                     className="flex-1 flex flex-col items-center gap-1 py-1 active:scale-90 transition-transform relative"
                   >
                     {tab.id === "favorites" && favorites.length > 0 && (
-                      <span className="absolute top-0.5 right-5 w-4 h-4 bg-red-500 rounded-full text-white text-[9px] font-black flex items-center justify-center">
+                      <span className="absolute top-0.5 right-5 w-4 h-4 bg-red-500 rounded-full text-white text-\[11px\] font-black flex items-center justify-center">
                         {favorites.length}
                       </span>
                     )}
@@ -611,7 +611,7 @@ export default function AppPage() {
                       />
                     </motion.div>
                     <span
-                      className="text-[10px] font-semibold"
+                      className="text-sm font-semibold"
                       style={{ color: isActive ? "var(--green)" : "#c4cdd8" }}
                     >
                       {tab.label}
