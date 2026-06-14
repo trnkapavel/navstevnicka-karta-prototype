@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Compass, CreditCard, Heart, Menu, MapPin, Star,
@@ -115,11 +115,21 @@ function PlaceGridCard({ place, onClick, onFav, faved }: { place: typeof places[
 }
 
 export default function AppPage() {
+  const [sessionReady, setSessionReady] = useState(false);
   const [activeTab, setActiveTab] = useState<Tab>("discover");
   const [activeCategory, setActiveCategory] = useState<Category | "Vše">("Vše");
   const [searchQuery, setSearchQuery] = useState("");
   const [showAI, setShowAI] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    if (!sessionStorage.getItem("nk-session")) {
+      router.replace("/onboarding");
+    } else {
+      setSessionReady(true);
+    }
+  }, [router]);
+
   const {
     points, savingsKc, visits, streak,
     favorites, toggleFavorite, isFavorite,
@@ -142,6 +152,8 @@ export default function AppPage() {
   }, [activeCategory, searchQuery]);
 
   const favoritePlaces = places.filter(p => favorites.includes(p.id));
+
+  if (!sessionReady) return <div className="h-full w-full" style={{ background: "var(--bg-main)" }} />;
 
   return (
     <>

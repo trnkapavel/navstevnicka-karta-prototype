@@ -45,21 +45,26 @@ export default function OnboardingFlow() {
     [current]
   );
 
+  const finish = useCallback((dest: string) => {
+    sessionStorage.setItem("nk-session", "1");
+    router.push(dest);
+  }, [router]);
+
   const goNext = useCallback(() => {
     if (current < SLIDES.length - 1) {
       goTo(current + 1);
     } else {
-      router.push("/register");
+      finish("/register");
     }
-  }, [current, goTo, router]);
+  }, [current, goTo, finish]);
 
   const goPrev = useCallback(() => {
     if (current > 0) goTo(current - 1);
   }, [current, goTo]);
 
   const handleSkip = useCallback(() => {
-    router.push("/");
-  }, [router]);
+    finish("/");
+  }, [finish]);
 
   const handleDragEnd = useCallback(
     (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
