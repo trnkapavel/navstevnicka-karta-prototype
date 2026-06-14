@@ -152,7 +152,7 @@ body {
 .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
 
 /* Header top padding = fixed base + safe area stacked */
-.header-top  { padding-top: calc(4.5rem + env(safe-area-inset-top, 0px)); }
+.header-top  { padding-top: calc(1rem + env(safe-area-inset-top, 0px)); }
 
 /* ── Scrollbar hide ── */
 .scrollbar-none::-webkit-scrollbar { display: none; }
