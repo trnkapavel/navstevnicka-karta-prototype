@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useState } from "react";
+import { use, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeft, MapPin, Clock, Phone, Star, Heart, Share2,
@@ -18,6 +18,8 @@ export default function PlaceDetail({ params }: { params: Promise<{ id: string }
   const place = places.find((p) => p.id === id);
   const { isFavorite, toggleFavorite, hasRedeemed } = useGame();
   const [showDiscount, setShowDiscount] = useState(false);
+  const [sheetExpanded, setSheetExpanded] = useState(false);
+  const dragStartY = useRef(0);
 
   if (!place) {
     return (
@@ -79,8 +81,8 @@ export default function PlaceDetail({ params }: { params: Promise<{ id: string }
           </div>
         </div>
 
-        {/* Place info on hero */}
-        <div className="absolute bottom-10 left-5 right-5">
+        {/* Place info on hero — text ends ~5vh above content card (53vh) */}
+        <div className="absolute left-5 right-5" style={{ bottom: "14vh" }}>
           <div className="flex items-center gap-2 mb-2.5">
             <span
               className="text-xs font-bold px-2.5 py-1 rounded-full"
@@ -121,21 +123,32 @@ export default function PlaceDetail({ params }: { params: Promise<{ id: string }
         </div>
       </div>
 
-      {/* ── Content card – slides over hero ── */}
-      <div
-        className="absolute left-0 right-0 bottom-0 overflow-y-auto scrollbar-none"
+      {/* ── Content card – slides over hero, expandable ── */}
+      <motion.div
+        className="absolute left-0 right-0 bottom-0 flex flex-col"
+        animate={{ top: sheetExpanded ? "12%" : "53%" }}
+        transition={{ type: "spring", stiffness: 320, damping: 30 }}
         style={{
-          top: "53%",
           borderRadius: "32px 32px 0 0",
           background: "var(--bg-main)",
           boxShadow: "0 -12px 48px rgba(8,16,12,0.20)",
         }}
       >
-        {/* Drag handle */}
-        <div className="flex justify-center pt-3 pb-2">
-          <div className="w-9 h-1 rounded-full" style={{ background: "rgba(0,0,0,0.10)" }} />
+        {/* Drag handle – tap or swipe to expand/collapse */}
+        <div
+          className="flex justify-center pt-3 pb-2 flex-shrink-0 cursor-pointer select-none touch-none"
+          onClick={() => setSheetExpanded(e => !e)}
+          onPointerDown={e => { dragStartY.current = e.clientY; }}
+          onPointerUp={e => {
+            const delta = dragStartY.current - e.clientY;
+            if (delta > 30) setSheetExpanded(true);
+            else if (delta < -30) setSheetExpanded(false);
+          }}
+        >
+          <div className="w-9 h-1 rounded-full" style={{ background: "rgba(0,0,0,0.14)" }} />
         </div>
 
+        <div className="flex-1 overflow-y-auto scrollbar-none">
         <div className="px-5 pb-36">
           {/* Quick actions */}
           <div className="flex gap-2 mb-5 mt-1">
@@ -249,7 +262,8 @@ export default function PlaceDetail({ params }: { params: Promise<{ id: string }
             </div>
           )}
         </div>
-      </div>
+        </div>
+      </motion.div>
 
       {/* ── Sticky CTA ── */}
       {!showDiscount && (
