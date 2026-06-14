@@ -1,0 +1,336 @@
+.hero {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--void);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* ── Atmosféra ── */
+.atmosphere {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.grain {
+  position: absolute;
+  inset: -50%;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  animation: grainShift 8s steps(6) infinite;
+}
+
+.vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 120% 100% at 50% 50%,
+    transparent 40%,
+    rgba(0, 0, 0, 0.45) 100%
+  );
+}
+
+.lightLeak {
+  position: absolute;
+  top: -15%;
+  right: -8%;
+  width: 65%;
+  height: 75%;
+  background: radial-gradient(
+    ellipse 50% 45% at 65% 35%,
+    rgba(181, 0, 0, 0.14) 0%,
+    transparent 65%
+  );
+  animation: auraPulse 6s ease-in-out infinite;
+}
+
+/* ── Iso mapa — horní plocha, text zóna zůstává volná dole ── */
+.visual {
+  position: absolute;
+  top: var(--nav-h);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.sceneAura {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 55% 50% at 62% 42%,
+    rgba(181, 0, 0, 0.16) 0%,
+    transparent 60%
+  );
+  filter: blur(48px);
+  opacity: 0;
+  transition: opacity 1.2s var(--ease-cinematic);
+}
+
+.hero[data-scene-ready] .sceneAura {
+  opacity: 1;
+}
+
+/* ── Gradient pod text — ne box, text zůstane velký ── */
+.captionStrip {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 48%;
+  background:
+    linear-gradient(
+      0deg,
+      var(--void) 0%,
+      rgba(248, 246, 242, 0.97) 28%,
+      rgba(248, 246, 242, 0.55) 58%,
+      transparent 100%
+    ),
+    linear-gradient(
+      90deg,
+      rgba(248, 246, 242, 0.98) 0%,
+      rgba(248, 246, 242, 0.75) 35%,
+      transparent 68%
+    );
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ── Copy — Figma Layout B, velký editorial text ── */
+.copyPanel {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  z-index: 3;
+  width: 100%;
+  max-width: 52rem;
+}
+
+.copy {
+  position: relative;
+  padding: 0 3.5rem 4rem 5rem;
+}
+
+.accent {
+  display: block;
+  width: 2px;
+  height: 5.5rem;
+  margin-bottom: 1.75rem;
+  border-radius: 1px;
+  background: linear-gradient(to bottom, var(--red-core), rgba(181, 0, 0, 0.15));
+  box-shadow:
+    0 0 20px var(--red-signal),
+    0 0 48px var(--red-aura);
+  opacity: 0;
+  transform: scaleY(0);
+  transform-origin: top;
+  animation: accentReveal 0.9s var(--ease-cinematic) 0.2s forwards;
+}
+
+.eyebrow {
+  font-family: var(--font-ui);
+  font-size: var(--label);
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--red-core);
+  text-shadow: 0 0 24px var(--red-aura);
+  margin-bottom: 1.5rem;
+  opacity: 0;
+  transform: translateY(12px);
+  animation: copyReveal 0.8s var(--ease-cinematic) 0.35s forwards;
+  transition: opacity 0.3s ease;
+}
+
+.eyebrowBeat {
+  color: var(--ink-muted);
+  text-shadow: none;
+}
+
+.h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--display-hero);
+  font-weight: 400;
+  line-height: var(--display-lh);
+  letter-spacing: -0.035em;
+  color: var(--warm);
+}
+
+.h1Line {
+  display: block;
+  opacity: 0;
+  transform: translateY(24px);
+  animation: copyReveal 0.9s var(--ease-cinematic) forwards;
+}
+
+.h1Line:nth-child(1) {
+  animation-delay: 0.45s;
+}
+
+.h1Line:nth-child(2) {
+  animation-delay: 0.58s;
+}
+
+.h1Line:nth-child(3) {
+  animation-delay: 0.71s;
+}
+
+.h1Em {
+  font-style: italic;
+  white-space: nowrap;
+  text-shadow:
+    0 0 24px rgba(181, 0, 0, 0.85),
+    0 0 64px rgba(181, 0, 0, 0.45),
+    0 0 120px rgba(181, 0, 0, 0.2);
+}
+
+.subtitle {
+  margin: 1.75rem 0 0;
+  max-width: 36rem;
+  font-family: var(--font-ui);
+  font-size: var(--body-lg);
+  line-height: 1.6;
+  color: var(--warm-muted);
+  opacity: 0;
+  transform: translateY(16px);
+  animation: copyReveal 0.8s var(--ease-cinematic) 0.9s forwards;
+}
+
+.scrollCue {
+  position: absolute;
+  left: 3.5rem;
+  bottom: 1.75rem;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.625rem;
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.18);
+  opacity: 0;
+  animation: copyReveal 0.8s var(--ease-cinematic) 1.2s forwards;
+}
+
+.scrollLine {
+  width: 1px;
+  height: 2.25rem;
+  background: linear-gradient(to bottom, rgba(181, 0, 0, 0.5), transparent);
+  animation: scrollPulse 2.4s ease-in-out infinite;
+}
+
+@keyframes grainShift {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(1%, 1%);
+  }
+}
+
+@keyframes auraPulse {
+  0%,
+  100% {
+    opacity: 0.85;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes accentReveal {
+  to {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+@keyframes copyReveal {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scrollPulse {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scaleY(0.85);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+/* ── Desktop — mapa nahoře, text velký dole vlevo ── */
+@media (min-width: 1025px) {
+  .visual {
+    bottom: 26%;
+  }
+
+  .copyPanel {
+    max-width: 52rem;
+  }
+
+  .h1Line {
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 1024px) {
+  .visual {
+    bottom: 46%;
+  }
+
+  .captionStrip {
+    height: 52%;
+  }
+
+  .copy {
+    padding: 0 1.75rem 4.5rem;
+  }
+
+  .copyPanel {
+    max-width: none;
+  }
+
+  .accent {
+    height: 3.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .scrollCue {
+    left: 1.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grain,
+  .lightLeak,
+  .sceneAura,
+  .scrollLine {
+    animation: none;
+  }
+
+  .accent,
+  .eyebrow,
+  .h1Line,
+  .subtitle,
+  .scrollCue {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+}

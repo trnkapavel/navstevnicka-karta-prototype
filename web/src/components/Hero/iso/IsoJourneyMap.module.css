@@ -1,0 +1,163 @@
+.wrap {
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 0;
+  overflow: hidden;
+  pointer-events: auto;
+  cursor: default;
+}
+
+.svg {
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  display: block;
+  overflow: hidden;
+}
+
+.svg :global(.iso-signal-path-active) {
+  filter: url(#iso-glow);
+}
+
+/* ── Plošiny — float zůstává v CSS, stav řídí Motion ── */
+.svg :global(.iso-platform[data-visited]:not([data-active])) {
+  opacity: 0.94;
+}
+
+.svg :global(.iso-platform:not([data-visited]):not([data-active])) {
+  opacity: 0.78;
+}
+
+.svg :global(.iso-props-active) {
+  pointer-events: none;
+}
+
+.svg :global(.iso-scenes-top) {
+  pointer-events: none;
+}
+
+.svg :global(.iso-scene-art) {
+  pointer-events: none;
+}
+
+.svg :global(.iso-scene-art-ghost) {
+  filter: saturate(0.55) contrast(0.92);
+}
+
+.svg :global(.iso-scene-art-active) {
+  filter: drop-shadow(0 6px 14px rgba(26, 26, 26, 0.14));
+}
+
+.svg :global(.iso-scene-ground) {
+  fill: rgba(181, 0, 0, 0.07);
+}
+
+.svg :global(.iso-platform-float) {
+  animation: isoFloat 7s ease-in-out 1.2s infinite;
+}
+
+.svg :global(.iso-platform:focus-visible) {
+  outline: none;
+}
+
+.svg :global(.iso-platform:focus-visible .iso-platform-float polygon:last-of-type) {
+  stroke: rgba(244, 241, 236, 0.6);
+}
+
+/* ── Labely — vždy navrchu, čitelné ── */
+.svg :global(.iso-labels-top) {
+  pointer-events: none;
+}
+
+/* Neaktivní — jen číslo v kolečku */
+.svg :global(.iso-dot-num) {
+  fill: #6f2f6a;
+  font-family: var(--font-ui), Inter, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Aktivní — světlá karta, patka pro fázi */
+.svg :global(.iso-card-bg) {
+  fill: #ffffff;
+  stroke: rgba(111, 47, 106, 0.18);
+  stroke-width: 1.5;
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.1));
+}
+
+.svg :global(.iso-card-stem) {
+  stroke: rgba(111, 47, 106, 0.35);
+  stroke-width: 1.5;
+}
+
+.svg :global(.iso-card-num) {
+  fill: var(--red-core);
+  font-family: var(--font-ui), Inter, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.svg :global(.iso-card-tag) {
+  fill: #1a1a1a;
+  font-family: var(--font-display), "Instrument Serif", Georgia, serif;
+  font-size: 17px;
+  font-weight: 400;
+}
+
+.svg :global(.iso-card-label) {
+  fill: rgba(26, 26, 26, 0.62);
+  font-family: var(--font-ui), Inter, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* ── Cestující host ── */
+.svg :global(.iso-traveler-core) {
+  fill: #e02020;
+  filter: drop-shadow(0 0 8px rgba(224, 32, 32, 0.9));
+}
+
+.svg :global(.iso-traveler-head) {
+  fill: rgba(244, 241, 236, 0.9);
+}
+
+.svg :global(.iso-traveler-halo) {
+  fill: rgba(224, 32, 32, 0.2);
+}
+
+.svg :global(.iso-particle) {
+  animation: isoParticle 4s ease-in-out infinite;
+}
+
+@keyframes isoFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes isoParticle {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 0.85;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .svg :global(.iso-platform-float),
+  .svg :global(.iso-particle) {
+    animation: none;
+  }
+}

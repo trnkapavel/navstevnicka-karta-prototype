@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 160" fill="none" aria-hidden="true">
+  <title>Online check-in  formul�Y</title>
+  <path d="M40 108 L100 78 L160 108 L100 138 Z" fill="#f0eeea" stroke="#d8d4d0" stroke-width="1.2"/>
+  <path d="M40 108 L40 118 L100 148 L100 138 Z" fill="#e5e2dd"/>
+  <path d="M100 138 L100 148 L160 118 L160 108 Z" fill="#ddd9d4"/>
+  <!-- Tablet stojan -->
+  <path d="M88 104 L112 92 L116 96 L92 108 Z" fill="#202124" opacity="0.35"/>
+  <!-- Tablet -->
+  <rect x="78" y="52" width="44" height="58" rx="4" fill="#202124"/>
+  <rect x="82" y="56" width="36" height="48" rx="2" fill="#ffffff"/>
+  <text x="100" y="68" text-anchor="middle" fill="#202124" font-size="6" font-family="Inter,sans-serif" font-weight="600">Check-in</text>
+  <rect x="86" y="72" width="28" height="3" rx="1" fill="#202124" opacity="0.15"/>
+  <rect x="86" y="78" width="24" height="3" rx="1" fill="#202124" opacity="0.12"/>
+  <rect x="86" y="84" width="26" height="3" rx="1" fill="#202124" opacity="0.12"/>
+  <rect x="86" y="90" width="20" height="3" rx="1" fill="#202124" opacity="0.1"/>
+  <!-- Fajfka -->
+  <circle cx="108" cy="98" r="7" fill="none" stroke="#b50000" stroke-width="1.8"/>
+  <path d="M105 98 L107 100.5 L112 95" stroke="#b50000" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Host s telefonem -->
+  <circle cx="58" cy="96" r="5" fill="#202124" opacity="0.6"/>
+  <path d="M52 102 Q58 108 64 102 L62 114 Q58 117 54 114 Z" fill="#b50000" opacity="0.45"/>
+  <rect x="64" y="100" width="8" height="12" rx="1.5" fill="#202124" opacity="0.5"/>
+</svg>

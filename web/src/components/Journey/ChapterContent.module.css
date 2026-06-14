@@ -1,0 +1,328 @@
+.layoutFull {
+  margin-top: 2.75rem;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: clamp(2rem, 5vw, 4.5rem);
+  align-items: start;
+  margin-top: 2.75rem;
+}
+
+.layout[data-screen-first] {
+  direction: rtl;
+}
+
+.layout[data-screen-first] > * {
+  direction: ltr;
+}
+
+.layout[data-layout="cards-3"] .cardGrid,
+.layout[data-layout="cards-4"] .cardGrid {
+  grid-column: 1 / -1;
+}
+
+/* —— Feature rows (editorial, nopan-style) —— */
+.featureList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.featureItem {
+  display: grid;
+  grid-template-columns: 3.5rem minmax(0, 1fr);
+  gap: 1.25rem 1.75rem;
+  align-items: start;
+  padding: 1.75rem 0;
+  border-bottom: 1px solid var(--chapter-divider, rgba(255, 255, 255, 0.08));
+}
+
+.featureItem:first-child {
+  padding-top: 0;
+}
+
+.featureItem:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.featureIndex {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+  color: var(--chapter-muted, rgba(244, 241, 236, 0.38));
+  padding-top: 0.2rem;
+}
+
+.featureList[data-index-variant="prominent"] .featureItem {
+  grid-template-columns: clamp(3.5rem, 5vw, 4.75rem) minmax(0, 1fr);
+  gap: 1.5rem 2rem;
+}
+
+.featureList[data-index-variant="prominent"] .featureIndex {
+  font-size: clamp(1.75rem, 2.4vw, 2.125rem);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  color: var(--red-core);
+  padding-top: 0.05rem;
+}
+
+.featureList[data-index-variant="subtle"] .featureIndex {
+  font-size: var(--text-xs);
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  opacity: 0.55;
+}
+
+.featureList[data-index-variant="none"] .featureItem {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.featureBody {
+  min-width: 0;
+}
+
+.body {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: var(--text-md);
+  line-height: 1.65;
+  color: var(--chapter-body, var(--warm-muted));
+}
+
+.body :global(strong),
+.body :global(b) {
+  font-weight: 600;
+  color: var(--chapter-strong, var(--warm));
+}
+
+.body a {
+  color: var(--chapter-link, var(--warm));
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(181, 0, 0, 0.45);
+  transition: text-decoration-color 0.2s ease;
+}
+
+.body a:hover {
+  text-decoration-color: var(--red-core);
+}
+
+.linkCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--chapter-link, var(--red-core));
+  text-decoration: none;
+  transition: gap 0.25s var(--ease-cinematic);
+}
+
+.linkCta:hover {
+  gap: 0.75rem;
+}
+
+.linkArrow {
+  display: inline-block;
+  transition: transform 0.25s var(--ease-cinematic);
+}
+
+.linkCta:hover .linkArrow {
+  transform: translateX(3px);
+}
+
+/* —— Card grid — bez rámečků, jemný hover —— */
+.cardGrid {
+  display: grid;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.cardGrid[data-count="3"] {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.cardGrid[data-count="4"] {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.card {
+  position: relative;
+  padding: 0 0 0 0;
+  border: none;
+  background: transparent;
+  transition: transform 0.4s var(--ease-cinematic);
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  inset: -1rem -1.25rem;
+  border-radius: 16px;
+  background: var(--chapter-hover, rgba(255, 255, 255, 0.03));
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+.cardIndex {
+  display: block;
+  margin-bottom: 1rem;
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  font-variant-numeric: tabular-nums;
+  color: var(--chapter-muted, rgba(244, 241, 236, 0.38));
+}
+
+.cardGrid[data-index-variant="prominent"] .cardIndex {
+  margin-bottom: 1.25rem;
+  font-size: clamp(1.5rem, 2vw, 1.875rem);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--red-core);
+}
+
+.cardGrid[data-index-variant="subtle"] .cardIndex {
+  margin-bottom: 0.75rem;
+  font-size: var(--text-xs);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  opacity: 0.55;
+}
+
+.cardGrid[data-index-variant="none"] .cardIndex {
+  display: none;
+}
+
+.card .body {
+  font-size: var(--text-base);
+  line-height: 1.6;
+}
+
+.card .linkCta {
+  margin-top: 1.25rem;
+}
+
+/* —— Screenshot — měkký glow, žádný dashed rámeček —— */
+.screenshot {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  align-self: center;
+}
+
+.screenshotGlow {
+  position: absolute;
+  top: 10%;
+  left: 5%;
+  right: 5%;
+  bottom: 5%;
+  border-radius: 24px;
+  background: radial-gradient(
+    ellipse 80% 70% at 50% 45%,
+    var(--chapter-glow, rgba(181, 0, 0, 0.14)) 0%,
+    transparent 70%
+  );
+  filter: blur(24px);
+  pointer-events: none;
+}
+
+.screenshotFrame {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--chapter-shot-bg, rgba(255, 255, 255, 0.04));
+  box-shadow:
+    inset 0 0 0 1px var(--chapter-shot-ring, rgba(255, 255, 255, 0.07)),
+    0 24px 64px rgba(0, 0, 0, 0.28);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.screenshotFrame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    165deg,
+    rgba(255, 255, 255, 0.06) 0%,
+    transparent 45%
+  );
+  pointer-events: none;
+}
+
+.screenshotLabel {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--chapter-muted, rgba(244, 241, 236, 0.4));
+}
+
+.screenshotCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--chapter-link, var(--red-core));
+  text-decoration: none;
+  transition: gap 0.25s var(--ease-cinematic);
+}
+
+.screenshotCta:hover {
+  gap: 0.75rem;
+}
+
+@media (max-width: 960px) {
+  .layout {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .layout[data-screen-first] {
+    direction: ltr;
+  }
+
+  .screenshot {
+    order: -1;
+  }
+
+  .cardGrid[data-count="3"],
+  .cardGrid[data-count="4"] {
+    grid-template-columns: 1fr;
+  }
+
+  .featureItem {
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+    gap: 1rem;
+  }
+}
