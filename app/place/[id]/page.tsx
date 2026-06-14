@@ -16,7 +16,7 @@ export default function PlaceDetail({ params }: { params: Promise<{ id: string }
   const { id } = use(params);
   const router = useRouter();
   const place = places.find((p) => p.id === id);
-  const { isFavorite, toggleFavorite, hasRedeemed, isTicketUnlocked } = useGame();
+  const { isFavorite, toggleFavorite, hasRedeemed, isTicketUnlocked, points } = useGame();
   const [showDiscount, setShowDiscount] = useState(false);
   const [sheetExpanded, setSheetExpanded] = useState(false);
   const dragStartY = useRef(0);
@@ -38,6 +38,17 @@ export default function PlaceDetail({ params }: { params: Promise<{ id: string }
   const liked = isFavorite(place.id);
   const redeemed = hasRedeemed(place.id);
   const ticketUnlocked = isTicketUnlocked(place.id);
+  const pointsEarned = place.pointsReward + 20;
+
+  // Nejbližší vstupenka k odemčení (toto místo má přednost, pak nejlevnější jiné)
+  const nextTicket = place.ticketCost
+    ? { name: place.name, cost: place.ticketCost, isThis: true }
+    : (() => {
+        const cheapest = places
+          .filter(p => p.ticketCost && !isTicketUnlocked(p.id))
+          .sort((a, b) => (a.ticketCost ?? 0) - (b.ticketCost ?? 0))[0];
+        return cheapest ? { name: cheapest.name, cost: cheapest.ticketCost!, isThis: false } : null;
+      })();
   const related = places.filter((p) => p.id !== place.id && p.category === place.category).slice(0, 4);
 
   return (
@@ -212,7 +223,9 @@ export default function PlaceDetail({ params }: { params: Promise<{ id: string }
             }}
           >
             <div className="absolute inset-0 holo-shine opacity-25 pointer-events-none" />
-            <div className="flex items-center gap-3">
+
+            {/* Sleva řádek */}
+            <div className="flex items-center gap-3 mb-3">
               <div className="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0" style={{ background: "rgba(26,122,94,0.1)" }}>
                 <Coins size={22} color="var(--green)" />
               </div>
@@ -221,11 +234,49 @@ export default function PlaceDetail({ params }: { params: Promise<{ id: string }
                 <p className="text-2xl font-black" style={{ color: "var(--green)" }}>{discountInfo.estimatedSaving} Kč</p>
               </div>
               <div className="text-right">
-                <p className="text-xs" style={{ color: "var(--text-muted)" }}>+ body</p>
-                <p className="font-black text-sm" style={{ color: "#d97706" }}>+{place.pointsReward} bodů</p>
+                <p className="text-xs mb-0.5" style={{ color: "var(--text-muted)" }}>získáte</p>
+                <p className="font-black text-lg leading-none" style={{ color: "#d97706" }}>+{pointsEarned}</p>
+                <p className="text-xs font-semibold" style={{ color: "#d97706" }}>bodů</p>
               </div>
             </div>
-            <p className="text-xs mt-2 leading-relaxed" style={{ color: "var(--text-muted)" }}>{discountInfo.description}</p>
+
+            <p className="text-xs mb-3 leading-relaxed" style={{ color: "var(--text-muted)" }}>{discountInfo.description}</p>
+
+            {/* Progress k vstupence */}
+            {nextTicket && !ticketUnlocked && (
+              <div className="rounded-2xl px-3 py-2.5" style={{ background: "rgba(0,0,0,0.04)" }}>
+                <div className="flex items-center justify-between mb-1.5">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-sm">🎟</span>
+                    <p className="text-xs font-semibold" style={{ color: "var(--text-sub)" }}>
+                      {nextTicket.isThis ? "Vstupenka sem zdarma" : `Vstupenka: ${nextTicket.name}`}
+                    </p>
+                  </div>
+                  <p className="text-xs font-bold" style={{ color: "var(--text-muted)" }}>
+                    {Math.min(points + pointsEarned, nextTicket.cost)}/{nextTicket.cost} bodů
+                  </p>
+                </div>
+                <div className="h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(0,0,0,0.08)" }}>
+                  <div
+                    className="h-full rounded-full transition-all"
+                    style={{
+                      width: `${Math.min((points + pointsEarned) / nextTicket.cost, 1) * 100}%`,
+                      background: "linear-gradient(90deg, #1a7a5e, #2563eb)",
+                    }}
+                  />
+                </div>
+                <p className="text-[11px] mt-1.5" style={{ color: "var(--text-muted)" }}>
+                  Po uplatnění bude {Math.max(nextTicket.cost - points - pointsEarned, 0)} bodů do vstupenky
+                </p>
+              </div>
+            )}
+
+            {ticketUnlocked && (
+              <div className="flex items-center gap-2 rounded-2xl px-3 py-2" style={{ background: "rgba(26,122,94,0.10)" }}>
+                <span className="text-sm">🎟</span>
+                <p className="text-xs font-bold" style={{ color: "var(--green)" }}>Vstupenka sem je odemčená výše ↑</p>
+              </div>
+            )}
           </motion.div>
 
           {/* Tags */}
