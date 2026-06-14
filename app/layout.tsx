@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
+import { GameProvider } from "@/lib/game-context";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -62,7 +63,7 @@ export default function RootLayout({
         <link rel="apple-touch-startup-image" href="/splash-640x1136.png"  media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)" />
       </head>
       <body className="h-full overflow-hidden" style={{ background: "#f0f5f2" }}>
-        {children}
+        <GameProvider>{children}</GameProvider>
         <script
           dangerouslySetInnerHTML={{
             __html: `

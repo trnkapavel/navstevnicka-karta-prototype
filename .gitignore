@@ -23,6 +23,9 @@
 # misc
 .DS_Store
 *.pem
+.playwright-mcp/
+screen-*.png
+app/.next/
 
 # debug
 npm-debug.log*

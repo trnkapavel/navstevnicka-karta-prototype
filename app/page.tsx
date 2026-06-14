@@ -5,8 +5,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Compass, CreditCard, Heart, Menu, MapPin, Star,
   ChevronRight, Sparkles, Search, X,
-  Flame, Trophy, Zap, Clock, QrCode,
+  Flame, Trophy, Zap, Clock, QrCode, Map, Users,
 } from "lucide-react";
+import dynamic from "next/dynamic";
+
+const MapView = dynamic(() => import("@/components/MapView"), { ssr: false });
 import { useRouter } from "next/navigation";
 import { places, type Category } from "@/data/places";
 import { useGame } from "@/lib/game-context";
@@ -15,10 +18,11 @@ import Aurora from "@/components/ui/Aurora";
 import LevelBar from "@/components/ui/LevelBar";
 import SavingsHistory from "@/components/SavingsHistory";
 
-type Tab = "discover" | "card" | "favorites" | "menu";
+type Tab = "discover" | "map" | "card" | "favorites" | "menu";
 
 const tabs = [
   { id: "discover" as Tab, label: "Objevuj", icon: Compass },
+  { id: "map" as Tab, label: "Mapa", icon: Map },
   { id: "card" as Tab, label: "Karta", icon: CreditCard },
   { id: "favorites" as Tab, label: "Oblíbené", icon: Heart },
   { id: "menu" as Tab, label: "Menu", icon: Menu },
@@ -34,31 +38,79 @@ const categories: { label: string; value: Category | "Vše"; emoji: string }[] =
   { label: "Sport", value: "Sport", emoji: "⚡" },
 ];
 
-function HotDealCard({ place, onClick }: { place: typeof places[0]; onClick: () => void }) {
+function FeaturedCard({ place, onClick }: { place: typeof places[0]; onClick: () => void }) {
   return (
     <motion.button
-      whileTap={{ scale: 0.96 }}
+      whileTap={{ scale: 0.97 }}
       onClick={onClick}
-      className="flex-shrink-0 w-44 rounded-3xl overflow-hidden relative text-left shadow-lg"
+      className="w-full rounded-3xl overflow-hidden relative text-left shadow-lg"
       style={{ height: 220 }}
     >
       <img src={place.img} alt={place.name} className="w-full h-full object-cover" />
-      <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(15,30,20,0.88) 0%, rgba(15,30,20,0.1) 60%, transparent 100%)" }} />
-      <div className="absolute top-3 left-3 flex items-center gap-1 px-2 py-1 rounded-xl" style={{ background: "rgba(255,255,255,0.25)", backdropFilter: "blur(12px)" }}>
-        <Flame size={11} color="#d97706" />
-        <span className="text-xs font-bold" style={{ color: "#92400e" }}>HOT</span>
+      <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(8,18,12,0.92) 0%, rgba(8,18,12,0.15) 55%, transparent 100%)" }} />
+      <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl" style={{ background: "rgba(255,255,255,0.18)", backdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.28)" }}>
+        <Flame size={12} color="#fbbf24" />
+        <span className="text-xs font-bold text-white">Výběr týdne</span>
       </div>
-      <div className="absolute bottom-0 left-0 right-0 p-3">
-        <p className="text-white font-bold text-xs leading-tight line-clamp-2">{place.name}</p>
-        <div className="flex items-center gap-1 mt-1">
-          <MapPin size={9} color="rgba(255,255,255,0.6)" />
+      <div className="absolute bottom-0 left-0 right-0 p-4">
+        <span className="text-xs font-bold px-2 py-0.5 rounded-full mb-2 inline-block" style={{ background: "rgba(26,122,94,0.8)", color: "white" }}>{place.category}</span>
+        <p className="text-white font-black text-lg leading-tight mb-1.5" style={{ fontFamily: "var(--font-outfit)" }}>{place.name}</p>
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-0.5">
+            <Star size={10} color="#fbbf24" fill="#fbbf24" />
+            <span className="text-white font-bold text-xs ml-0.5">{place.rating}</span>
+          </div>
+          <span className="text-white/30">·</span>
+          <MapPin size={9} color="rgba(255,255,255,0.55)" />
           <span className="text-white/60 text-xs">{place.distance} km</span>
-          <span className="text-white/30 ml-1">·</span>
-          <Star size={9} color="#fbbf24" fill="#fbbf24" />
-          <span className="text-white/80 text-xs font-medium">{place.rating}</span>
+          <span className="text-white/30">·</span>
+          <span className="text-xs text-white/50">{place.reviewCount} hodnocení</span>
         </div>
       </div>
     </motion.button>
+  );
+}
+
+const seasonLabel: Record<string, { label: string; color: string }> = {
+  leto:      { label: "☀️ Léto",  color: "rgba(217,119,6,0.85)" },
+  zima:      { label: "❄️ Zima",  color: "rgba(37,99,235,0.85)" },
+  jaro:      { label: "🌸 Jaro",  color: "rgba(236,72,153,0.85)" },
+  celorocne: { label: "✦ Vždy",  color: "rgba(26,122,94,0.85)" },
+};
+
+function PlaceGridCard({ place, onClick, onFav, faved }: { place: typeof places[0]; onClick: () => void; onFav: () => void; faved: boolean }) {
+  const season = seasonLabel[place.season];
+  return (
+    <motion.div
+      whileTap={{ scale: 0.96 }}
+      onClick={onClick}
+      className="rounded-3xl overflow-hidden relative cursor-pointer shadow-md"
+      style={{ height: 200 }}
+    >
+      <img src={place.img} alt={place.name} className="w-full h-full object-cover" />
+      <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(8,18,12,0.90) 0%, transparent 55%)" }} />
+      <div className="absolute top-2.5 left-2.5 flex items-center gap-1 px-1.5 py-0.5 rounded-lg" style={{ background: season.color, backdropFilter: "blur(8px)" }}>
+        <span className="text-white text-[10px] font-bold">{season.label}</span>
+      </div>
+      <button
+        onClick={e => { e.stopPropagation(); onFav(); }}
+        className="absolute top-2.5 right-2.5 w-7 h-7 rounded-xl flex items-center justify-center"
+        style={{ background: "rgba(255,255,255,0.85)", backdropFilter: "blur(8px)" }}
+      >
+        <Heart size={12} color={faved ? "#ef4444" : "#9ca3af"} fill={faved ? "#ef4444" : "transparent"} />
+      </button>
+      <div className="absolute bottom-0 left-0 right-0 p-2.5">
+        <p className="text-[10px] font-bold mb-0.5" style={{ color: "rgba(52,211,153,0.85)" }}>{place.category}</p>
+        <p className="font-bold text-xs text-white line-clamp-2 leading-tight mb-1">{place.name}</p>
+        <div className="flex items-center gap-1">
+          <Star size={8} color="#fbbf24" fill="#fbbf24" />
+          <span className="text-white/80 text-[10px] font-semibold">{place.rating}</span>
+          <span className="text-white/30 text-[10px]">·</span>
+          <Users size={8} color="rgba(255,255,255,0.45)" />
+          <span className="text-white/50 text-[10px]">{place.monthlyVisits >= 1000 ? `${(place.monthlyVisits/1000).toFixed(1)}k` : place.monthlyVisits}/měs.</span>
+        </div>
+      </div>
+    </motion.div>
   );
 }
 
@@ -112,11 +164,26 @@ export default function AppPage() {
       >
         <Aurora />
 
-        <div className="relative z-10 flex-1 overflow-y-auto scrollbar-none">
+        {/* ── MAPA (non-scrollable) ── */}
+        {activeTab === "map" && (
+          <div className="relative z-10 flex-1 overflow-hidden">
+            <MapView />
+          </div>
+        )}
+
+        <div className={`relative z-10 flex-1 overflow-y-auto scrollbar-none ${activeTab === "map" ? "hidden" : ""}`}>
+          <AnimatePresence mode="wait" initial={false}>
 
           {/* ── DISCOVER ── */}
           {activeTab === "discover" && (
-            <div className="pb-4">
+          <motion.div
+            key="discover"
+            initial={{ opacity: 0, x: -16 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 16 }}
+            transition={{ duration: 0.18, ease: "easeOut" }}
+          >
+          <div className="pb-4">
               {/* Header */}
               <div className="px-5 header-top pb-5">
                 <div className="flex items-start justify-between mb-5">
@@ -159,66 +226,24 @@ export default function AppPage() {
                 </div>
               </div>
 
-              {/* AI Banner */}
-              <div className="px-5 mb-5">
-                <motion.button
-                  whileTap={{ scale: 0.97 }}
-                  onClick={() => setShowAI(true)}
-                  className="w-full glass-green rounded-3xl px-4 py-4 flex items-center gap-3 shadow-sm"
-                >
-                  <div
-                    className="w-10 h-10 rounded-2xl flex items-center justify-center flex-shrink-0"
-                    style={{ background: "linear-gradient(135deg, #1a7a5e, #2563eb)" }}
-                  >
-                    <Sparkles size={18} color="white" />
-                  </div>
-                  <div className="flex-1 text-left">
-                    <p className="font-bold text-sm" style={{ color: "var(--text-main)" }}>AI Průvodce regionem</p>
-                    <p className="text-xs" style={{ color: "var(--text-muted)" }}>"Chci výlet s rodinou na víkend…"</p>
-                  </div>
-                  <div className="glass w-7 h-7 rounded-xl flex items-center justify-center">
-                    <ChevronRight size={14} color="var(--text-muted)" />
-                  </div>
-                </motion.button>
-              </div>
-
-              {/* Hot deals */}
-              <div className="mb-5">
-                <div className="px-5 flex items-center gap-2 mb-3">
-                  <Flame size={15} color="#d97706" />
-                  <p className="font-bold text-sm" style={{ color: "var(--text-main)" }}>Horké nabídky</p>
-                  <span className="ml-auto glass text-xs px-2 py-0.5 rounded-full flex items-center gap-1" style={{ color: "var(--text-muted)" }}>
-                    <Clock size={9} />
-                    Dnes
-                  </span>
+              {/* Featured card – top pick */}
+              {!searchQuery && activeCategory === "Vše" && hotDeals[0] && (
+                <div className="px-5 mb-5">
+                  <FeaturedCard place={hotDeals[0]} onClick={() => router.push(`/place/${hotDeals[0].id}`)} />
                 </div>
-                <div className="flex gap-3 overflow-x-auto px-5 scrollbar-none pb-1">
-                  {hotDeals.map(p => (
-                    <HotDealCard key={p.id} place={p} onClick={() => router.push(`/place/${p.id}`)} />
-                  ))}
-                </div>
-              </div>
+              )}
 
               {/* Categories */}
-              <div className="flex gap-2 overflow-x-auto px-5 mb-4 scrollbar-none pb-1">
+              <div className="flex gap-2 overflow-x-auto px-5 mb-5 scrollbar-none pb-1">
                 {categories.map(cat => (
                   <motion.button
                     key={cat.value}
                     onClick={() => setActiveCategory(cat.value as Category | "Vše")}
                     whileTap={{ scale: 0.92 }}
-                    className="flex-shrink-0 flex items-center gap-1.5 px-3.5 py-2 rounded-2xl text-xs font-bold transition-all"
+                    className="flex-shrink-0 flex items-center gap-1.5 px-3.5 py-2 rounded-2xl text-xs font-bold"
                     style={cat.value === activeCategory
-                      ? {
-                          background: "linear-gradient(135deg, #1a7a5e, #2563eb)",
-                          color: "white",
-                          boxShadow: "0 4px 16px rgba(26,122,94,0.3)",
-                        }
-                      : {
-                          background: "rgba(255,255,255,0.7)",
-                          color: "var(--text-sub)",
-                          border: "1px solid rgba(0,0,0,0.06)",
-                          backdropFilter: "blur(12px)",
-                        }
+                      ? { background: "linear-gradient(135deg, #1a7a5e, #2563eb)", color: "white", boxShadow: "0 4px 16px rgba(26,122,94,0.28)" }
+                      : { background: "rgba(255,255,255,0.72)", color: "var(--text-sub)", border: "1px solid rgba(0,0,0,0.06)", backdropFilter: "blur(12px)" }
                     }
                   >
                     <span>{cat.emoji}</span>
@@ -227,87 +252,79 @@ export default function AppPage() {
                 ))}
               </div>
 
-              {/* Count */}
-              <div className="px-5 mb-3">
-                <p className="text-xs font-medium" style={{ color: "var(--text-muted)" }}>
-                  {searchQuery ? `Výsledky: "${searchQuery}"` : activeCategory === "Vše" ? "Všechna místa" : activeCategory}
-                  <span className="ml-1" style={{ color: "#c4d0d8" }}>· {filteredPlaces.length} míst</span>
-                </p>
+              {/* AI banner – compact */}
+              <div className="px-5 mb-5">
+                <motion.button
+                  whileTap={{ scale: 0.97 }}
+                  onClick={() => setShowAI(true)}
+                  className="w-full rounded-2xl px-4 py-3.5 flex items-center gap-3"
+                  style={{ background: "linear-gradient(135deg, rgba(26,122,94,0.08), rgba(37,99,235,0.06))", border: "1px solid rgba(26,122,94,0.14)" }}
+                >
+                  <div className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: "linear-gradient(135deg, #1a7a5e, #2563eb)" }}>
+                    <Sparkles size={15} color="white" />
+                  </div>
+                  <div className="flex-1 text-left">
+                    <p className="font-bold text-sm" style={{ color: "var(--text-main)" }}>AI Průvodce</p>
+                    <p className="text-xs" style={{ color: "var(--text-muted)" }}>„Chci výlet s rodinou na víkend…"</p>
+                  </div>
+                  <ChevronRight size={14} color="var(--text-muted)" />
+                </motion.button>
               </div>
 
-              {/* Places list */}
-              <div className="px-5 flex flex-col gap-3">
+              {/* Section label */}
+              <div className="px-5 mb-3 flex items-center justify-between">
+                <p className="font-bold text-sm" style={{ color: "var(--text-main)" }}>
+                  {searchQuery ? `„${searchQuery}"` : activeCategory === "Vše" ? "Všechna místa" : activeCategory}
+                </p>
+                <span className="text-xs" style={{ color: "var(--text-muted)" }}>{filteredPlaces.length} míst</span>
+              </div>
+
+              {/* Visual grid */}
+              <div className="px-4">
                 <AnimatePresence mode="popLayout">
                   {filteredPlaces.length === 0 ? (
                     <motion.div key="empty" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-16">
                       <p className="text-sm mb-3" style={{ color: "var(--text-muted)" }}>Žádná místa</p>
-                      <button
-                        onClick={() => { setSearchQuery(""); setActiveCategory("Vše"); }}
-                        className="text-sm font-semibold"
-                        style={{ color: "var(--green)" }}
-                      >
+                      <button onClick={() => { setSearchQuery(""); setActiveCategory("Vše"); }} className="text-sm font-semibold" style={{ color: "var(--green)" }}>
                         Zobrazit vše
                       </button>
                     </motion.div>
-                  ) : filteredPlaces.map((place, i) => {
-                    return (
-                      <motion.div
-                        key={place.id}
-                        layout
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.95 }}
-                        transition={{ delay: i * 0.04, type: "spring" as const, stiffness: 350 }}
-                        onClick={() => router.push(`/place/${place.id}`)}
-                        role="button"
-                        tabIndex={0}
-                        className="glass rounded-3xl overflow-hidden flex items-center cursor-pointer"
-                        style={{ boxShadow: "0 2px 16px rgba(30,80,60,0.07)" }}
-                      >
-                        <div className="relative flex-shrink-0">
-                          <img src={place.img} alt={place.name} className="w-24 h-24 object-cover" />
-                          <button
-                            onClick={e => { e.stopPropagation(); toggleFavorite(place.id); }}
-                            className="absolute top-2 right-2 w-6 h-6 rounded-full flex items-center justify-center"
-                            style={{ background: "rgba(255,255,255,0.85)", backdropFilter: "blur(8px)" }}
-                          >
-                            <Heart
-                              size={11}
-                              color={isFavorite(place.id) ? "#ef4444" : "#9ca3af"}
-                              fill={isFavorite(place.id) ? "#ef4444" : "transparent"}
-                            />
-                          </button>
-                        </div>
-                        <div className="flex-1 px-3 py-3 min-w-0">
-                          <p className="text-xs font-bold uppercase tracking-wider mb-0.5" style={{ color: "var(--green-mid)" }}>
-                            {place.category}
-                          </p>
-                          <p className="font-bold text-sm line-clamp-1 mb-1.5" style={{ color: "var(--text-main)" }}>
-                            {place.name}
-                          </p>
-                          <div className="flex items-center gap-2">
-                            <div className="flex items-center gap-0.5">
-                              <Star size={10} color="#d97706" fill="#d97706" />
-                              <span className="text-xs font-semibold" style={{ color: "var(--text-sub)" }}>{place.rating}</span>
-                            </div>
-                            <span style={{ color: "var(--border)" }}>·</span>
-                            <div className="flex items-center gap-0.5">
-                              <MapPin size={9} color="var(--text-muted)" />
-                              <span className="text-xs" style={{ color: "var(--text-muted)" }}>{place.distance} km</span>
-                            </div>
-                          </div>
-                        </div>
-                        <ChevronRight size={16} color="var(--text-muted)" className="mr-4 flex-shrink-0" />
-                      </motion.div>
-                    );
-                  })}
+                  ) : (
+                    <div className="grid grid-cols-2 gap-3">
+                      {filteredPlaces.map((place, i) => (
+                        <motion.div
+                          key={place.id}
+                          layout
+                          initial={{ opacity: 0, scale: 0.92 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          exit={{ opacity: 0, scale: 0.90 }}
+                          transition={{ delay: i * 0.035, type: "spring" as const, stiffness: 380 }}
+                        >
+                          <PlaceGridCard
+                            place={place}
+                            onClick={() => router.push(`/place/${place.id}`)}
+                            onFav={() => toggleFavorite(place.id)}
+                            faved={isFavorite(place.id)}
+                          />
+                        </motion.div>
+                      ))}
+                    </div>
+                  )}
                 </AnimatePresence>
               </div>
-            </div>
+          </div>
+          </motion.div>
           )}
 
           {/* ── KARTA ── */}
           {activeTab === "card" && (
+          <motion.div
+            key="card"
+            initial={{ opacity: 0, x: -16 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 16 }}
+            transition={{ duration: 0.18, ease: "easeOut" }}
+          >
             <div className="px-5 header-top pb-8">
               <p className="text-xs font-semibold mb-1" style={{ color: "var(--text-muted)" }}>Vaše karta</p>
               <h1 className="font-black text-2xl mb-4" style={{ color: "var(--text-main)", fontFamily: "var(--font-outfit)" }}>
@@ -470,10 +487,18 @@ export default function AppPage() {
                 <p className="text-xs text-center" style={{ color: "var(--text-muted)" }}>Ukažte QR kód u partnera</p>
               </div>
             </div>
+          </motion.div>
           )}
 
           {/* ── OBLÍBENÉ ── */}
           {activeTab === "favorites" && (
+          <motion.div
+            key="favorites"
+            initial={{ opacity: 0, x: -16 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 16 }}
+            transition={{ duration: 0.18, ease: "easeOut" }}
+          >
             <div className="header-top pb-6">
               <div className="px-5 mb-5">
                 <p className="text-xs font-semibold mb-0.5" style={{ color: "var(--text-muted)" }}>Vaše sbírka</p>
@@ -495,39 +520,39 @@ export default function AppPage() {
                   </motion.div>
                 </div>
               ) : (
-                <div className="px-5 flex flex-col gap-3">
-                  {favoritePlaces.map((place, i) => {
-                    return (
+                <div className="px-4">
+                  <div className="grid grid-cols-2 gap-3">
+                    {favoritePlaces.map((place, i) => (
                       <motion.div
                         key={place.id}
-                        initial={{ opacity: 0, y: 12 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: i * 0.06 }}
-                        onClick={() => router.push(`/place/${place.id}`)}
-                        role="button"
-                        tabIndex={0}
-                        className="glass rounded-3xl overflow-hidden flex items-center cursor-pointer shadow-sm"
+                        initial={{ opacity: 0, scale: 0.92 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: i * 0.04, type: "spring" as const, stiffness: 380 }}
                       >
-                        <img src={place.img} alt={place.name} className="w-24 h-24 object-cover flex-shrink-0" />
-                        <div className="flex-1 px-3 py-3 min-w-0">
-                          <p className="text-xs font-bold uppercase tracking-wider mb-0.5" style={{ color: "var(--green-mid)" }}>{place.category}</p>
-                          <p className="font-bold text-sm line-clamp-1" style={{ color: "var(--text-main)" }}>{place.name}</p>
-                          <div className="flex items-center gap-1 mt-1">
-                            <MapPin size={9} color="var(--text-muted)" />
-                            <span className="text-xs" style={{ color: "var(--text-muted)" }}>{place.distance} km</span>
-                          </div>
-                        </div>
-                        <ChevronRight size={16} color="var(--text-muted)" className="mr-4 flex-shrink-0" />
+                        <PlaceGridCard
+                          place={place}
+                          onClick={() => router.push(`/place/${place.id}`)}
+                          onFav={() => toggleFavorite(place.id)}
+                          faved={true}
+                        />
                       </motion.div>
-                    );
-                  })}
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
+          </motion.div>
           )}
 
           {/* ── MENU ── */}
           {activeTab === "menu" && (
+          <motion.div
+            key="menu"
+            initial={{ opacity: 0, x: -16 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 16 }}
+            transition={{ duration: 0.18, ease: "easeOut" }}
+          >
             <div className="px-5 header-top pb-8">
               <p className="text-xs font-semibold mb-0.5" style={{ color: "var(--text-muted)" }}>Aplikace</p>
               <h1 className="font-black text-2xl mb-6" style={{ color: "var(--text-main)", fontFamily: "var(--font-outfit)" }}>Menu</h1>
@@ -559,7 +584,10 @@ export default function AppPage() {
                 ))}
               </div>
             </div>
+          </motion.div>
           )}
+
+          </AnimatePresence>
         </div>
 
         {/* Bottom nav */}
