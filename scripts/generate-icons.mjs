@@ -2,52 +2,59 @@ import sharp from "sharp";
 
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <defs>
-    <!-- Gradient aplikace: zelená nahoře → modrá dole (jako v app) -->
-    <linearGradient id="appGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%"   stop-color="#34d99a"/>
+    <!-- Světlé pozadí — stejná barva jako app bg -->
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#e8f4ef"/>
+      <stop offset="100%" stop-color="#ddeaf8"/>
+    </linearGradient>
+
+    <!-- Gradient jehly: zelená → teal → modrá (barvy aplikace) -->
+    <linearGradient id="north" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"   stop-color="#22d48a"/>
       <stop offset="50%"  stop-color="#1a7a5e"/>
       <stop offset="100%" stop-color="#2563eb"/>
     </linearGradient>
-    <!-- Tmavé pozadí s nádechem zelené -->
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%"   stop-color="#0b1f15"/>
-      <stop offset="100%" stop-color="#080f1e"/>
-    </linearGradient>
-    <!-- Záblesk za jehlou -->
-    <radialGradient id="glow" cx="50%" cy="35%" r="40%">
-      <stop offset="0%"   stop-color="#1a7a5e" stop-opacity="0.45"/>
-      <stop offset="100%" stop-color="#1a7a5e" stop-opacity="0"/>
-    </radialGradient>
+
+    <!-- Jemný stín pod kompasem -->
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="14" flood-color="#1a7a5e" flood-opacity="0.18"/>
+    </filter>
   </defs>
 
   <!-- Pozadí -->
   <rect width="512" height="512" fill="url(#bg)"/>
-  <!-- Záblesk -->
-  <ellipse cx="256" cy="180" rx="140" ry="110" fill="url(#glow)"/>
 
-  <!-- Kruh kompasu -->
-  <circle cx="256" cy="256" r="196" fill="none"
-    stroke="#1a7a5e" stroke-width="1.5" opacity="0.30"/>
-  <circle cx="256" cy="256" r="196" fill="none"
-    stroke="#2563eb" stroke-width="1.5" opacity="0.15"
-    stroke-dasharray="4 8"/>
+  <!-- Kruh — rám kompasu, jemný -->
+  <circle cx="256" cy="256" r="192"
+    fill="none"
+    stroke="#1a7a5e"
+    stroke-width="3"
+    opacity="0.14"/>
 
-  <!-- Severní jehla — silná, gradient zelená→modrá -->
-  <polygon points="256,52  286,264  256,286  226,264"
-    fill="url(#appGrad)"/>
+  <!-- Čtyři orientační tečky -->
+  <circle cx="256" cy="64"  r="6" fill="#1a7a5e" opacity="0.30"/>
+  <circle cx="448" cy="256" r="5" fill="#1a7a5e" opacity="0.14"/>
+  <circle cx="64"  cy="256" r="5" fill="#1a7a5e" opacity="0.14"/>
+  <circle cx="256" cy="448" r="5" fill="#1a7a5e" opacity="0.10"/>
 
-  <!-- Jižní jehla — kratší, bílá, tlumená -->
-  <polygon points="256,460 286,264  256,286  226,264"
-    fill="white" opacity="0.13"/>
+  <!-- Severní jehla — tučná, gradient -->
+  <polygon
+    points="256,64  292,274  256,296  220,274"
+    fill="url(#north)"
+    filter="url(#shadow)"
+  />
 
-  <!-- Východní a západní jehla — tenká -->
-  <polygon points="460,256 268,236 268,276" fill="white" opacity="0.10"/>
-  <polygon points="52,256  244,236 244,276" fill="white" opacity="0.10"/>
+  <!-- Jižní jehla — kratší, neutrální šedá -->
+  <polygon
+    points="256,448 292,274  256,296  220,274"
+    fill="#b0c4ba"
+    opacity="0.7"
+  />
 
-  <!-- Střed -->
-  <circle cx="256" cy="275" r="20" fill="#080f1e"/>
-  <circle cx="256" cy="275" r="12" fill="url(#appGrad)" opacity="0.95"/>
-  <circle cx="256" cy="275" r="5"  fill="white" opacity="0.95"/>
+  <!-- Střed: bílý kroužek + barevná tečka -->
+  <circle cx="256" cy="285" r="22" fill="white" opacity="0.95"/>
+  <circle cx="256" cy="285" r="13" fill="url(#north)"/>
+  <circle cx="256" cy="285" r="5"  fill="white"/>
 </svg>`;
 
 const buf = Buffer.from(svg);
