@@ -4,14 +4,13 @@ import { use, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeft, MapPin, Clock, Phone, Star, Heart, Share2,
-  Navigation, Tag, Sparkles, X, Coins,
+  Navigation, Sparkles, X, Coins,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { places } from "@/data/places";
 import { getDiscountInfo } from "@/lib/discounts";
 import { useGame } from "@/lib/game-context";
 import Aurora from "@/components/ui/Aurora";
-import DiscountBadge from "@/components/ui/DiscountBadge";
 import DiscountFlow from "@/components/DiscountFlow";
 
 export default function PlaceDetail({ params }: { params: Promise<{ id: string }> }) {
@@ -89,17 +88,16 @@ export default function PlaceDetail({ params }: { params: Promise<{ id: string }
             </div>
           </div>
 
-          <div className="absolute bottom-4 left-5 right-5 flex items-end justify-between">
-            <DiscountBadge info={discountInfo} size="lg" />
-            {redeemed && (
+          {redeemed && (
+            <div className="absolute bottom-4 right-5">
               <span
                 className="text-xs font-bold px-2.5 py-1 rounded-xl"
                 style={{ background: "rgba(26,122,94,0.9)", color: "white", backdropFilter: "blur(8px)" }}
               >
                 ✓ Uplatněno
               </span>
-            )}
-          </div>
+            </div>
+          )}
         </div>
 
         <div className="px-5 pt-5 pb-36">
@@ -218,7 +216,6 @@ export default function PlaceDetail({ params }: { params: Promise<{ id: string }
               <p className="font-bold text-sm mb-3" style={{ color: "var(--text-main)" }}>Podobná místa</p>
               <div className="flex gap-3 overflow-x-auto -mx-5 px-5 pb-1 scrollbar-none">
                 {related.map((r) => {
-                  const ri = getDiscountInfo(r.discount, r.free, r.basePrice, r.pointsReward, r.bonusText);
                   return (
                     <motion.button
                       key={r.id}
@@ -229,9 +226,9 @@ export default function PlaceDetail({ params }: { params: Promise<{ id: string }
                       <img src={r.img} alt={r.name} className="w-full h-24 object-cover" />
                       <div className="p-3">
                         <p className="font-semibold text-xs line-clamp-1" style={{ color: "var(--text-main)" }}>{r.name}</p>
-                        <div className="flex items-center justify-between mt-1">
-                          <span className="text-xs" style={{ color: "var(--text-muted)" }}>{r.distance} km</span>
-                          <DiscountBadge info={ri} size="sm" />
+                        <div className="flex items-center mt-1">
+                          <MapPin size={9} color="var(--text-muted)" />
+                          <span className="text-xs ml-0.5" style={{ color: "var(--text-muted)" }}>{r.distance} km</span>
                         </div>
                       </div>
                     </motion.button>
@@ -255,14 +252,6 @@ export default function PlaceDetail({ params }: { params: Promise<{ id: string }
               borderColor: "var(--border)",
             }}
           >
-            <div
-              className="flex items-center gap-2 mb-3 rounded-2xl px-3 py-2.5 glass"
-            >
-              <Tag size={14} color="#d97706" />
-              <p className="text-xs flex-1" style={{ color: "var(--text-sub)" }}>
-                {redeemed ? "Sleva u tohoto místa již byla uplatněna" : discountInfo.description}
-              </p>
-            </div>
             <div className="flex gap-2">
               <motion.button
                 whileTap={{ scale: 0.96 }}

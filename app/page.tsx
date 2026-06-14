@@ -9,12 +9,10 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { places, type Category } from "@/data/places";
-import { getDiscountInfo } from "@/lib/discounts";
 import { useGame } from "@/lib/game-context";
 import AISearch from "@/components/AISearch";
 import Aurora from "@/components/ui/Aurora";
 import LevelBar from "@/components/ui/LevelBar";
-import DiscountBadge from "@/components/ui/DiscountBadge";
 import SavingsHistory from "@/components/SavingsHistory";
 
 type Tab = "discover" | "card" | "favorites" | "menu";
@@ -37,7 +35,6 @@ const categories: { label: string; value: Category | "Vše"; emoji: string }[] =
 ];
 
 function HotDealCard({ place, onClick }: { place: typeof places[0]; onClick: () => void }) {
-  const info = getDiscountInfo(place.discount, place.free, place.basePrice, place.pointsReward, place.bonusText);
   return (
     <motion.button
       whileTap={{ scale: 0.96 }}
@@ -47,9 +44,6 @@ function HotDealCard({ place, onClick }: { place: typeof places[0]; onClick: () 
     >
       <img src={place.img} alt={place.name} className="w-full h-full object-cover" />
       <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(15,30,20,0.88) 0%, rgba(15,30,20,0.1) 60%, transparent 100%)" }} />
-      <div className="absolute top-3 right-3">
-        <DiscountBadge info={info} size="sm" />
-      </div>
       <div className="absolute top-3 left-3 flex items-center gap-1 px-2 py-1 rounded-xl" style={{ background: "rgba(255,255,255,0.25)", backdropFilter: "blur(12px)" }}>
         <Flame size={11} color="#d97706" />
         <span className="text-xs font-bold" style={{ color: "#92400e" }}>HOT</span>
@@ -256,7 +250,6 @@ export default function AppPage() {
                       </button>
                     </motion.div>
                   ) : filteredPlaces.map((place, i) => {
-                    const info = getDiscountInfo(place.discount, place.free, place.basePrice, place.pointsReward, place.bonusText);
                     return (
                       <motion.div
                         key={place.id}
@@ -304,9 +297,7 @@ export default function AppPage() {
                             </div>
                           </div>
                         </div>
-                        <div className="pr-4 flex-shrink-0">
-                          <DiscountBadge info={info} size="md" />
-                        </div>
+                        <ChevronRight size={16} color="var(--text-muted)" className="mr-4 flex-shrink-0" />
                       </motion.div>
                     );
                   })}
@@ -506,7 +497,6 @@ export default function AppPage() {
               ) : (
                 <div className="px-5 flex flex-col gap-3">
                   {favoritePlaces.map((place, i) => {
-                    const info = getDiscountInfo(place.discount, place.free, place.basePrice, place.pointsReward, place.bonusText);
                     return (
                       <motion.div
                         key={place.id}
@@ -527,9 +517,7 @@ export default function AppPage() {
                             <span className="text-xs" style={{ color: "var(--text-muted)" }}>{place.distance} km</span>
                           </div>
                         </div>
-                        <div className="pr-4">
-                          <DiscountBadge info={info} size="md" />
-                        </div>
+                        <ChevronRight size={16} color="var(--text-muted)" className="mr-4 flex-shrink-0" />
                       </motion.div>
                     );
                   })}
