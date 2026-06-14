@@ -58,7 +58,7 @@ export default function OnboardingFlow() {
   }, [current, goTo]);
 
   const handleSkip = useCallback(() => {
-    router.push("/app");
+    router.push("/");
   }, [router]);
 
   const handleDragEnd = useCallback(

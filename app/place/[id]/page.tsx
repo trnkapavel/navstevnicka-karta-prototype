@@ -61,7 +61,7 @@ export default function PlaceDetail({ params }: { params: Promise<{ id: string }
             }}
           />
 
-          <div className="absolute top-0 left-0 right-0 px-5 pt-14 safe-top flex items-center justify-between">
+          <div className="absolute top-0 left-0 right-0 px-5 header-top flex items-center justify-between">
             <motion.button
               whileTap={{ scale: 0.9 }}
               onClick={() => router.back()}
@@ -171,7 +171,7 @@ export default function PlaceDetail({ params }: { params: Promise<{ id: string }
               </div>
               <div className="text-right">
                 <p className="text-xs" style={{ color: "var(--text-muted)" }}>+ body</p>
-                <p className="font-black text-sm" style={{ color: "#d97706" }}>+{place.pointsReward} BB</p>
+                <p className="font-black text-sm" style={{ color: "#d97706" }}>+{place.pointsReward} bodů</p>
               </div>
             </div>
             <p className="text-xs mt-2 leading-relaxed" style={{ color: "var(--text-muted)" }}>{discountInfo.description}</p>
@@ -223,7 +223,7 @@ export default function PlaceDetail({ params }: { params: Promise<{ id: string }
                     <motion.button
                       key={r.id}
                       whileTap={{ scale: 0.96 }}
-                      onClick={() => router.push(`/app/place/${r.id}`)}
+                      onClick={() => router.push(`/place/${r.id}`)}
                       className="flex-shrink-0 w-40 glass rounded-2xl overflow-hidden text-left shadow-sm"
                     >
                       <img src={r.img} alt={r.name} className="w-full h-24 object-cover" />

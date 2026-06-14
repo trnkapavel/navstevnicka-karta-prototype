@@ -132,7 +132,7 @@ export default function AISearch({ onClose }: AISearchProps) {
                     initial={{ opacity: 0, x: -16 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: pi * 0.1, type: "spring", stiffness: 350 }}
-                    onClick={() => { onClose(); router.push(`/app/place/${place.id}`); }}
+                    onClick={() => { onClose(); router.push(`/place/${place.id}`); }}
                     className="flex items-center gap-3 bg-white/8 border border-white/12 rounded-2xl p-3 text-left active:scale-95 transition-transform"
                     style={{ background: "rgba(255,255,255,0.07)" }}
                   >

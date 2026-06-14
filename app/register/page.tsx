@@ -156,7 +156,7 @@ export default function RegisterPage() {
         className="flex-shrink-0 px-5 pb-8 pt-4 safe-bottom border-t border-gray-100"
       >
         <button
-          onClick={() => router.push("/app")}
+          onClick={() => router.push("/")}
           className="w-full py-4 rounded-2xl font-bold text-base text-white active:scale-95 transition-transform shadow-lg"
           style={{ background: "linear-gradient(135deg, #1b3a6b, #2d5a9e)" }}
         >

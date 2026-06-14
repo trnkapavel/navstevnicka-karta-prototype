@@ -6,6 +6,13 @@ interface DiscountBadgeProps {
   className?: string;
 }
 
+const bgColors: Record<string, string> = {
+  percent: "linear-gradient(135deg, #d97706, #f59e0b)",
+  free:    "linear-gradient(135deg, #1a7a5e, #22a87a)",
+  bonus:   "linear-gradient(135deg, #7c3aed, #9f5cf0)",
+  one_plus_one: "linear-gradient(135deg, #2563eb, #4a9ede)",
+};
+
 export default function DiscountBadge({ info, size = "md", className = "" }: DiscountBadgeProps) {
   const sizes = {
     sm: "text-[10px] px-2 py-0.5 rounded-lg",
@@ -15,8 +22,8 @@ export default function DiscountBadge({ info, size = "md", className = "" }: Dis
 
   return (
     <span
-      className={`glass font-black tracking-wide inline-block ${sizes[size]} ${className}`}
-      style={{ color: info.color }}
+      className={`font-black tracking-wide inline-block text-white shadow-md ${sizes[size]} ${className}`}
+      style={{ background: bgColors[info.type] ?? bgColors.percent }}
     >
       {info.shortLabel}
     </span>
