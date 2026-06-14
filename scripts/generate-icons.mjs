@@ -2,79 +2,52 @@ import sharp from "sharp";
 
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <defs>
-    <!-- Gradient aplikace: tmavá zelená → modrá -->
-    <linearGradient id="needle" x1="0%" y1="0%" x2="60%" y2="100%">
-      <stop offset="0%" stop-color="#34d99a"/>
-      <stop offset="55%" stop-color="#1a7a5e"/>
+    <!-- Gradient aplikace: zelená nahoře → modrá dole (jako v app) -->
+    <linearGradient id="appGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"   stop-color="#34d99a"/>
+      <stop offset="50%"  stop-color="#1a7a5e"/>
       <stop offset="100%" stop-color="#2563eb"/>
     </linearGradient>
-
-    <!-- Pozadí: hluboká tma s nádechem zelené -->
-    <linearGradient id="bg" x1="20%" y1="0%" x2="80%" y2="100%">
-      <stop offset="0%" stop-color="#071510"/>
-      <stop offset="100%" stop-color="#080f1f"/>
+    <!-- Tmavé pozadí s nádechem zelené -->
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#0b1f15"/>
+      <stop offset="100%" stop-color="#080f1e"/>
     </linearGradient>
-
-    <!-- Záblesk uprostřed -->
-    <radialGradient id="glow" cx="50%" cy="42%" r="48%">
-      <stop offset="0%" stop-color="#1a7a5e" stop-opacity="0.30"/>
-      <stop offset="60%" stop-color="#2563eb" stop-opacity="0.10"/>
-      <stop offset="100%" stop-color="#000" stop-opacity="0"/>
+    <!-- Záblesk za jehlou -->
+    <radialGradient id="glow" cx="50%" cy="35%" r="40%">
+      <stop offset="0%"   stop-color="#1a7a5e" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#1a7a5e" stop-opacity="0"/>
     </radialGradient>
-
-    <!-- Jemný lesk na horním okraji ikonky -->
-    <linearGradient id="shine" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="white" stop-opacity="0.07"/>
-      <stop offset="40%" stop-color="white" stop-opacity="0"/>
-    </linearGradient>
-
-    <!-- Gradient pro jižní (světlý) hrot -->
-    <linearGradient id="south" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="white" stop-opacity="0.22"/>
-      <stop offset="100%" stop-color="white" stop-opacity="0.06"/>
-    </linearGradient>
   </defs>
 
   <!-- Pozadí -->
   <rect width="512" height="512" fill="url(#bg)"/>
-  <rect width="512" height="512" fill="url(#glow)"/>
-  <rect width="512" height="512" fill="url(#shine)"/>
+  <!-- Záblesk -->
+  <ellipse cx="256" cy="180" rx="140" ry="110" fill="url(#glow)"/>
 
-  <!-- Vnější dekorativní kruh -->
-  <circle cx="256" cy="248" r="176"
-    fill="none"
-    stroke="url(#needle)"
-    stroke-width="1.2"
-    stroke-opacity="0.22"/>
+  <!-- Kruh kompasu -->
+  <circle cx="256" cy="256" r="196" fill="none"
+    stroke="#1a7a5e" stroke-width="1.5" opacity="0.30"/>
+  <circle cx="256" cy="256" r="196" fill="none"
+    stroke="#2563eb" stroke-width="1.5" opacity="0.15"
+    stroke-dasharray="4 8"/>
 
-  <!-- Vnitřní jemný kruh -->
-  <circle cx="256" cy="248" r="138"
-    fill="none"
-    stroke="white"
-    stroke-width="0.8"
-    stroke-opacity="0.06"/>
+  <!-- Severní jehla — silná, gradient zelená→modrá -->
+  <polygon points="256,52  286,264  256,286  226,264"
+    fill="url(#appGrad)"/>
 
-  <!-- Čtyři orientační tečky na kruhu -->
-  <circle cx="256" cy="72"  r="3.5" fill="#34d99a" opacity="0.7"/>
-  <circle cx="432" cy="248" r="3" fill="white" opacity="0.18"/>
-  <circle cx="80"  cy="248" r="3" fill="white" opacity="0.18"/>
-  <circle cx="256" cy="424" r="3" fill="white" opacity="0.12"/>
+  <!-- Jižní jehla — kratší, bílá, tlumená -->
+  <polygon points="256,460 286,264  256,286  226,264"
+    fill="white" opacity="0.13"/>
 
-  <!-- Severní hrot (velký, gradient) -->
-  <polygon points="256,72  278,258  256,274  234,258" fill="url(#needle)"/>
+  <!-- Východní a západní jehla — tenká -->
+  <polygon points="460,256 268,236 268,276" fill="white" opacity="0.10"/>
+  <polygon points="52,256  244,236 244,276" fill="white" opacity="0.10"/>
 
-  <!-- Jižní hrot (kratší, světlý) -->
-  <polygon points="256,424 278,258  256,274  234,258" fill="url(#south)"/>
-
-  <!-- Východní hrot (tenký) -->
-  <polygon points="432,248 262,240 262,256 262,256" fill="white" fill-opacity="0.10"/>
-  <!-- Západní hrot (tenký) -->
-  <polygon points="80,248  250,240 250,256 250,256" fill="white" fill-opacity="0.10"/>
-
-  <!-- Střed — bílý kroužek s tmavým jádrem -->
-  <circle cx="256" cy="266" r="11" fill="#0a1a14"/>
-  <circle cx="256" cy="266" r="7"  fill="url(#needle)" opacity="0.9"/>
-  <circle cx="256" cy="266" r="3"  fill="white" opacity="0.9"/>
+  <!-- Střed -->
+  <circle cx="256" cy="275" r="20" fill="#080f1e"/>
+  <circle cx="256" cy="275" r="12" fill="url(#appGrad)" opacity="0.95"/>
+  <circle cx="256" cy="275" r="5"  fill="white" opacity="0.95"/>
 </svg>`;
 
 const buf = Buffer.from(svg);
