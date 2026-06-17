@@ -340,6 +340,72 @@ export default function AppPage() {
           >
             <div className="header-top pb-8">
 
+              {/* ── Virtuální fyzická karta ── */}
+              <div className="px-5 mb-5">
+                <motion.div
+                  initial={{ opacity: 0, y: 14, scale: 0.97 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ type: "spring", stiffness: 320, damping: 28 }}
+                  className="relative rounded-[28px] overflow-hidden shadow-2xl"
+                  style={{ height: 206, background: "linear-gradient(135deg, #0a2540 0%, #0f3d5c 40%, #0d3d2a 100%)" }}
+                >
+                  {/* Dekorativní kruhy */}
+                  <div className="absolute -top-20 -right-20 w-72 h-72 rounded-full" style={{ background: "rgba(26,122,94,0.22)" }} />
+                  <div className="absolute -bottom-24 -left-16 w-64 h-64 rounded-full" style={{ background: "rgba(37,99,235,0.18)" }} />
+                  {/* Holografický lesk */}
+                  <div className="holo-shine absolute inset-0 opacity-25 pointer-events-none" />
+
+                  <div className="absolute inset-0 p-5 flex flex-col justify-between">
+                    {/* Vrchní řada */}
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <p className="text-xs font-bold uppercase tracking-widest mb-0.5" style={{ color: "rgba(255,255,255,0.42)" }}>
+                          Návštěvnická karta
+                        </p>
+                        <p className="font-black text-base text-white leading-tight" style={{ fontFamily: "var(--font-outfit)" }}>
+                          Berounsko · Brdy · Podbrdsko
+                        </p>
+                      </div>
+                      <div className="w-11 h-11 rounded-2xl flex items-center justify-center flex-shrink-0"
+                        style={{ background: "rgba(255,255,255,0.10)", border: "1px solid rgba(255,255,255,0.16)" }}>
+                        <Compass size={22} color="white" strokeWidth={2.2} />
+                      </div>
+                    </div>
+
+                    {/* Číslo karty — tečky */}
+                    <div className="flex items-center gap-3.5">
+                      {[0, 1, 2, 3].map(g => (
+                        <div key={g} className="flex gap-1.5">
+                          {[0, 1, 2, 3].map(d => (
+                            <div key={d} className="w-2 h-2 rounded-full" style={{ background: "rgba(255,255,255,0.38)" }} />
+                          ))}
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Spodní řada */}
+                    <div className="flex items-end justify-between">
+                      <div>
+                        <p className="text-[11px] font-semibold uppercase tracking-wider mb-1" style={{ color: "rgba(255,255,255,0.42)" }}>
+                          Držitel karty
+                        </p>
+                        <p className="font-black text-lg text-white leading-none" style={{ fontFamily: "var(--font-outfit)" }}>
+                          {isRegistered ? userName : "—"}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-[11px] font-semibold uppercase tracking-wider mb-1" style={{ color: "rgba(255,255,255,0.42)" }}>
+                          Body
+                        </p>
+                        <p className="font-black text-2xl leading-none" style={{ fontFamily: "var(--font-outfit)", background: "linear-gradient(90deg, #34d99a, #2563eb)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+                          {points}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              </div>
+
               {/* Registrace výzva nebo uvítání */}
               {!isRegistered ? (
                 <motion.div
